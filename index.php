@@ -1,3 +1,6 @@
+<?php
+  require_once __DIR__ . '/session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +33,9 @@
         Login to your account
         <span class="admin">Admin? <a href="./views/admin/admin_login.php">Login Here</a></span>
       </p>
-      <form action="authenticate.php" method="post">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
+      <form action="./controllers/LoginController.php" method="post">
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <input type="password" name="password" id="password" placeholder="Password" minlength="8" required>
         <button type="submit">LOGIN</button>
       </form>
       <div class="footer-links">

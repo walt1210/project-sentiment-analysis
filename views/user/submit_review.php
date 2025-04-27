@@ -1,3 +1,6 @@
+<?php
+  require_once __DIR__ . '/session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +19,7 @@
     <ul class="nav-links">
         <li><a href="submit_review.php">Submit Review</a></li>
         <li><a href="view_reviews.php">View My Reviews</a></li>
-        <li><a href="/project-sentiment-analysis/index.php">Logout</a></li>
+        <li><a href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
     </ul>
   </nav>
 
