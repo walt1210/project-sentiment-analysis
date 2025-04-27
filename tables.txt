@@ -1,0 +1,94 @@
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    password_ VARCHAR(100) NOT NULL,
+    role_id INT NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    log_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    log_action ENUM('login', 'logout') NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category_id INT NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    image_url VARCHAR(100) NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+CREATE TABLE product_reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    rating INT NOT NULL,
+    review_text VARCHAR(200) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE sentiments (
+    product_review_id INT PRIMARY KEY,
+    positive_count INT NOT NULL,
+    negative_count INT NOT NULL,
+    percentage DECIMAL(5,2) NOT NULL,
+    type ENUM('positive', 'negative', 'neutral') NOT NULL,
+    FOREIGN KEY (product_review_id) REFERENCES product_reviews(id)
+);
+
+
+
+INSERT INTO roles (name) VALUES ('standard');
+INSERT INTO roles (name) VALUES ('administrator');
+
+INSERT INTO users (email, first_name, last_name, password_, role_id)
+    VALUES ('walteru270@gmail.com', 'Walter', 'Ursua', '12345678', '2');
+
+INSERT INTO categories (name) VALUES ('sports');
+INSERT INTO categories (name) VALUES ('personal care');
+
+INSERT INTO products (name, category_id, description, image_url)
+    VALUES ('baby powder', '2', '500g', 'sample_url');
+
+INSERT INTO products (name, category_id, description, image_url)
+    VALUES ('basketball', '1', 'high quality', 'sample_url');
+
+INSERT INTO product_reviews (user_id, product_id, rating, review_text)
+    VALUES ('1', '1', '5', 'has a good quality');
+
+INSERT INTO sentiments (product_review_id, positive_count, negative_count, percentage, type)
+    VALUES ('1', '1', '0', '100', 'positive');
+
+SELECT
+    products.name AS 'product_name',
+    categories.name AS 'category_name',
+    users.email,
+    product_reviews.rating,
+    product_reviews.review_text,
+    sentiments.percentage,
+    sentiments.type
+FROM product_reviews
+LEFT JOIN products ON product_reviews.id = products.id
+LEFT JOIN categories ON products.category_id = categories.id
+LEFT JOIN sentiments ON product_reviews.id = sentiments.product_review_id
+LEFT JOIN users ON product_reviews.user_id = users.id
+-- FOR FILTERING
+WHERE product_reviews.product_id = '1' AND sentiments.type = 'negative'
