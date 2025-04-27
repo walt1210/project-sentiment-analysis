@@ -30,11 +30,12 @@
     <aside class="login-card">
       <h2>Register</h2>
       <p class="subhead">Register your account</p>
-      <form id="registerForm">
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+      <form id="registerForm" method="POST">
+        <input type="text" name="fname" id="fname" placeholder="First Name" required>
+        <input type="text" name="lname" id="lname" placeholder="Last Name" required>
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <input type="password" name="password" id="password" placeholder="Password" minlength="8" required>
+        <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" minlength="8" required>
         <button type="submit">REGISTER</button>
       </form>
       <div class="footer-links">
@@ -49,21 +50,38 @@
     $('#registerForm').on('submit', function(e) {
       e.preventDefault();
       const formData = $(this).serialize();
+      //console.log(formData);
 
-      $.ajax({
-        url: './api/register_user.php', // Backend endpoint for registration
+      if($('#password').val() == $('#confirm_password').val()){
+        $.ajax({
+        url: 'controllers/RegisterController.php', // Backend endpoint for registration
+        type: 'POST',
         method: 'POST',
         data: formData,
+        dataType: 'json',
         success: function(response) {
-          alert(response.message); // Show success or error message
+          alert(response.success); // Show success or error message
+          //console.log(response);
           if (response.success) {
             window.location.href = 'login.php'; // Redirect to login on success
+          }
+          else{
+            var err_msg = '';
+            var errors = response.errors;
+            errors.forEach(error_txt => {
+              err_msg = err_msg.concat(" ", error_txt);
+            });
+            alert(err_msg);
           }
         },
         error: function() {
           alert('An error occurred. Please try again.');
         }
       });
+      }
+      else{
+        alert('Passwords do not match. Try again.');
+      }
     });
   </script>
 </body>
