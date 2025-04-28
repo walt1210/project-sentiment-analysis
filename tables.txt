@@ -128,3 +128,5 @@ LEFT JOIN sentiments ON product_reviews.id = sentiments.product_review_id
 LEFT JOIN users ON product_reviews.user_id = users.id
 -- FOR FILTERING
 WHERE product_reviews.product_id = '1' AND sentiments.type = 'negative'
+
+--edit lang
