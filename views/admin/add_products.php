@@ -19,7 +19,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
           <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
-          <li class="nav-item"><a class="nav-link" href="/project-sentiment-analysis/index.php">Logout</a></li>
+          <li class="nav-item"><a class="nav-link" href="../../logoutController.php">Logout</a></li>
         </ul>
       </div>
     </nav>
