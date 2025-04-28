@@ -12,8 +12,8 @@
   <nav class="navbar">
     <div class="logo">
         <a href="/project-sentiment-analysis/index.php" class="logo">
-            <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon">
-            <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text">
+            <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
+            <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
     </div>
     <ul class="nav-links">

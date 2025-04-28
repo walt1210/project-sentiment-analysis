@@ -14,8 +14,8 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="30">
-        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="30">
+        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
+        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
       </a>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
@@ -29,7 +29,7 @@
   <section class="hero">
       <img src="/project-sentiment-analysis/assets/dashboard-hero.gif" alt="Sentimo Dashboard Overview" class="img-fluid">
     </section>
-    
+
   <div class="container mt-4">
 
     <!-- 2. User Welcome Area -->

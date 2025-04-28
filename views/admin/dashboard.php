@@ -15,8 +15,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="30">
-          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="30">
+          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
+          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
@@ -30,7 +30,7 @@
     <section class="hero">
       <img src="/project-sentiment-analysis/assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
     </section>
-    
+
   <main class="dashboard-page">
     <!-- 2) sentiment -->
     <h2>Sentiment Report</h2>
