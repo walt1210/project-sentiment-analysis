@@ -12,26 +12,34 @@
   <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="dashboard.php">
-          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="30">
-          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="30">
+      <a class="navbar-brand" href="superAdmin_dashboard.php">
+          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
+          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Super Admin Icon" height="20" style="margin-right: 5px;">
+              <strong>Super Admin</strong>
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="superAdmin_add_products.php">Add Product</a></li>
           <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
       </div>
     </nav>
 
-  <main class="dashboard-page">
-
     <!-- 1) hero GIF -->
     <section class="hero">
       <img src="/project-sentiment-analysis/assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
     </section>
+
+  <main class="dashboard-page">
 
     <!-- 2) sentiment -->
     <h2>Sentiment Report</h2>
@@ -96,14 +104,14 @@
 
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" style="background-color: #343a40; color: #f8f9fa; padding: 20px; text-align: center;">
     <div class="logo-small">
       <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
       <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
     </div>
     <ul class="footer-links">
-      <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-      <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+      <li><a href="/project-sentiment-analysis/about.php" style="color: #f8f9fa; text-decoration: none;">About</a></li>
+      <li><a href="/project-sentiment-analysis/creators.php" style="color: #f8f9fa; text-decoration: none;">Creators</a></li>
     </ul>
   </footer>
 

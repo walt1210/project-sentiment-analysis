@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — Manage Users</title>
+  <title>Sentimo — View Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
@@ -13,13 +13,13 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <a class="navbar-brand" href="superAdmin_dashboard.php">
+      <a class="navbar-brand" href="dashboard.php">
           <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
           <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
-          <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
+          <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
       </div>
@@ -33,7 +33,7 @@
     </section>
 
     <!-- 2) Page heading -->
-    <h2 class="mt-5">Manage Users</h2>
+    <h2 class="mt-5">View Users</h2>
 
     <!-- 3) Responsive users table -->
     <div class="table-wrapper">
@@ -45,7 +45,6 @@
             <th>Email</th>
             <th>Role ID</th>
             <th>Last Login</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -56,10 +55,6 @@
             <td>taylor.swift@gmail.com</td>
             <td>1</td> <!-- Role ID: 2 (User) -->
             <td>2025-04-17 12:34:56</td>
-            <td>
-              <button class="btn btn-sm btn-primary make-admin" data-id="001">Make Admin</button>
-              <button class="btn btn-sm btn-danger deactivate" data-id="001">Deactivate</button>
-            </td>
           </tr>
           <tr>
             <td>002</td>
@@ -67,10 +62,6 @@
             <td>kali.uchis@gmail.com</td>
             <td>2</td> <!-- Role ID: 2 (User) -->
             <td>2025-04-16 10:20:30</td>
-            <td>
-              <button class="btn btn-sm btn-primary make-admin" data-id="002">Make Admin</button>
-              <button class="btn btn-sm btn-danger deactivate" data-id="002">Deactivate</button>
-            </td>
           </tr>
           <tr>
             <td>003</td>
@@ -78,10 +69,6 @@
             <td>sabrina.carpenter@gmail.com</td>
             <td>1</td> <!-- Role ID: 1 (Admin) -->
             <td>2025-04-15 15:45:10</td>
-            <td>
-              <button class="btn btn-sm btn-primary make-admin" data-id="003" disabled>Make Admin</button>
-              <button class="btn btn-sm btn-danger deactivate" data-id="003">Deactivate</button>
-            </td>
           </tr>
         </tbody>
       </table>
