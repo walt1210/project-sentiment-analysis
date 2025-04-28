@@ -25,11 +25,12 @@
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <!-- 1. Hero GIF -->
-    <section class="hero">
+  <!-- 1. Hero GIF -->
+  <section class="hero">
       <img src="/project-sentiment-analysis/assets/dashboard-hero.gif" alt="Sentimo Dashboard Overview" class="img-fluid">
     </section>
+    
+  <div class="container mt-4">
 
     <!-- 2. User Welcome Area -->
     <div class="jumbotron text-center mt-4">
