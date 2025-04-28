@@ -8,22 +8,30 @@
   <title>Sentimo — Manage Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
-  <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
+  <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="superAdmin_dashboard.php">
-          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
-          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="superAdmin_dashboard.php">
+            <img src="../../assets/logo-icon-light.png" alt="Sentimo icon" height="50">
+            <img src="../../assets/logo-text-light.png" alt="Sentimo text" height="50">
         </a>
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link">
+                <img src="../../assets/super-admin-icon.png" alt="Super Admin Icon" height="40" style="margin-right: 5px;">
+                <strong>Super Admin</strong>
+              </a>
+            </li>
+        </ul>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
-          <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
-          <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="superAdmin_add_products.php">Add Product</a></li>
+            <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
+            <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
       </div>
-    </nav>
+  </nav>
 
   <main class="manageUsers-page">
 
@@ -89,14 +97,14 @@
 
   </main>
 
-  <footer class="site-footer">
-    <div class="logo-small">
-      <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-      <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+  <footer class="site-footer" style="background-color: #343a40; color: #f8f9fa; padding: 20px; text-align: center;">
+    <div class="logo-small" style="margin-left: 20px;">
+      <img src="../../assets/logo-icon-light.png" alt="">
+      <img src="../../assets/logo-text-light.png" alt="">
     </div>
     <ul class="footer-links">
-      <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-      <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+      <li><a href="../../about.php" style="color: #f8f9fa; text-decoration: none;">About</a></li>
+      <li><a href="../../creators.php" style="color: #f8f9fa; text-decoration: none;">Creators</a></li>
     </ul>
   </footer>
 
