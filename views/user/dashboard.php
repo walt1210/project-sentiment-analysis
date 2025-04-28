@@ -97,7 +97,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Sample Review -->
+        <!--  -->
         <tr>
           <td>Superstar II Shoes</td>
           <td>⭐⭐⭐⭐</td>
