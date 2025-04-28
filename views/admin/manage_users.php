@@ -54,7 +54,7 @@
             <td>001</td>
             <td>Taylor Swift</td>
             <td>taylor.swift@gmail.com</td>
-            <td>2</td> <!-- Role ID: 2 (User) -->
+            <td>1</td> <!-- Role ID: 2 (User) -->
             <td>2025-04-17 12:34:56</td>
             <td>
               <button class="btn btn-sm btn-primary make-admin" data-id="001">Make Admin</button>
