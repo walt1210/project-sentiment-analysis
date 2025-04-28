@@ -6,88 +6,79 @@
 <head>
   <meta charset="UTF-8">
   <title>Sentimo — View Reviews</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">
-        <a href="dashboard.php" class="logo">
-            <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon">
-            <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text">
-        </a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.php">
+        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="30">
+        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="30">
+      </a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_reviews.php">View My Reviews</a></li>
+        <li class="nav-item"><a class="nav-link" href="/project-sentiment-analysis/index.php">Logout</a></li>
+      </ul>
     </div>
-    <ul class="nav-links">
-        <li><a href="submit_review.php">Submit Review</a></li>
-        <li><a href="view_reviews.php">View My Reviews</a></li>
-        <li><a href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
-    </ul>
   </nav>
 
   <main class="viewReview-page">
-
-    <!-- 1) hero GIF -->
+    <!-- 1) Hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/view-reviews-hero.gif" alt="Sentimo View Reviews">
+      <img src="/project-sentiment-analysis/assets/view-reviews-hero.gif" alt="Sentimo View Reviews" class="img-fluid">
     </section>
 
-     <!-- 2) Edit Review Form -->
-     <h2>My Product Reviews</h2>
-     <section class="review-wrapper">
-      <div class="review-card">
-        <h2>Edit Review Form</h2>
-        <p class="subhead">Edit your Review</p>
-        <form action="#" method="POST">
-          <select name="product" required>
-            <option value="" disabled selected>Product</option>
-            <option value="superstar">Superstar II hoes</option>
-            <option value="tshirt">Cotton T-Shirt</option>
-            <option value="pants">Ultra Stretch Pants</option>
-            <option value="cap">Varsity Cap</option>
-          </select>
-
-          <div class="rating">
-            <!-- reverse order so CSS sibling selectors light up correctly -->
-            <input type="radio" id="star5" name="rating" value="5"/><label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3"/><label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2"/><label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
-          </div>
-
-          <textarea name="review" rows="6" placeholder="Review" required></textarea>
-
-          <button type="submit">EDIT REVIEW</button>
-        </form>
-      </div>
-    </section>
-    <!-- 3) Reviews Table -->
-      <!-- Reviews table -->
-  <div class="table-wrapper">
-    <table class="reviews-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Review</th>
-          <th>Rating</th>
-          <th>Sentiment</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- GENERATED ROWS (sample only) -->
-        <tr>
-            <td>Hakdog</td>
-            <td>Okay lang</td>
-            <td><!-- Stars from submit_review.php --></td>
-            <td><!-- Positive/Negative/Neutral --></td>
+    <!-- 2) Reviews Table -->
+    <h2 class="mt-5">My Product Reviews</h2>
+    <div class="table-wrapper">
+      <table id="reviewsTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Review</th>
+            <th>Rating</th>
+            <th>Sentiment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample Reviews -->
+          <tr>
+            <td>Superstar II Shoes</td>
+            <td>Great product! Very comfortable.</td>
+            <td>⭐⭐⭐⭐</td>
+            <td>Positive</td>
             <td>
-              <button class="action-btn edit">Edit</button>
-              <button class="action-btn delete">Delete</button>
+              <button class="btn btn-sm btn-warning edit-review" data-id="1">Edit</button>
+              <button class="btn btn-sm btn-danger delete-review" data-id="1">Delete</button>
             </td>
           </tr>
-      </tbody>
-    </table>
-  </div>
+          <tr>
+            <td>Smartphone X</td>
+            <td>Good performance but battery life could be better.</td>
+            <td>⭐⭐⭐</td>
+            <td>Neutral</td>
+            <td>
+              <button class="btn btn-sm btn-warning edit-review" data-id="2">Edit</button>
+              <button class="btn btn-sm btn-danger delete-review" data-id="2">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Ultra Stretch Pants</td>
+            <td>Perfect fit and very durable.</td>
+            <td>⭐⭐⭐⭐⭐</td>
+            <td>Positive</td>
+            <td>
+              <button class="btn btn-sm btn-warning edit-review" data-id="3">Edit</button>
+              <button class="btn btn-sm btn-danger delete-review" data-id="3">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -100,5 +91,38 @@
         <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
     </ul>
   </footer>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Initialize DataTable
+      $('#reviewsTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        lengthChange: true,
+        pageLength: 5 // Display 5 reviews per page
+      });
+
+      // Handle delete review
+      $('.delete-review').on('click', function() {
+        const reviewId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this review?')) {
+          alert('Review with ID ' + reviewId + ' deleted (sample action).');
+          // Backend integration: Replace this alert with an AJAX call to delete the review
+        }
+      });
+
+      // Handle edit review
+      $('.edit-review').on('click', function() {
+        const reviewId = $(this).data('id');
+        alert('Edit review with ID ' + reviewId + ' (sample action).');
+        // Backend integration: Redirect to an edit review page or open a modal for editing
+      });
+    });
+  </script>
 </body>
 </html>

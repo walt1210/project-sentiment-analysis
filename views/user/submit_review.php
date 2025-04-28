@@ -6,21 +6,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Sentimo — Submit Review</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">
-        <a href="dashboard.php" class="logo">
-            <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon">
-            <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text">
-        </a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.php">
+        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="30">
+        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="30">
+      </a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
+        <li class="nav-item"><a class="nav-link" href="view_reviews.php">View My Reviews</a></li>
+        <li class="nav-item"><a class="nav-link" href="/project-sentiment-analysis/index.php">Logout</a></li>
+      </ul>
     </div>
-    <ul class="nav-links">
-        <li><a href="submit_review.php">Submit Review</a></li>
-        <li><a href="view_reviews.php">View My Reviews</a></li>
-        <li><a href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
-    </ul>
   </nav>
 
   <main class="submitReview-page">
