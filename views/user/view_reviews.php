@@ -20,7 +20,7 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
         <li class="nav-item"><a class="nav-link" href="view_reviews.php">View My Reviews</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../logoutController.php">Logout</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
       </ul>
     </div>
   </nav>
