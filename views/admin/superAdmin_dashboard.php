@@ -21,7 +21,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link">
-              <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Super Admin Icon" height="20" style="margin-right: 5px;">
+              <img src="/project-sentiment-analysis/assets/super-admin-icon.png" alt="Super Admin Icon" height="40" style="margin-right: 5px;">
               <strong>Super Admin</strong>
             </a>
           </li>
