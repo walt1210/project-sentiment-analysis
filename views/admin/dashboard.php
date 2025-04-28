@@ -26,13 +26,12 @@
       </div>
     </nav>
 
-  <main class="dashboard-page">
-
     <!-- 1) hero GIF -->
     <section class="hero">
       <img src="/project-sentiment-analysis/assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
     </section>
-
+    
+  <main class="dashboard-page">
     <!-- 2) sentiment -->
     <h2>Sentiment Report</h2>
     <section class="sentiment-reports">
