@@ -8,14 +8,14 @@
   <meta charset="UTF-8">
   <title>Sentimo — User Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
+  <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
-        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
+        <img src="../../assets/logo-icon.png" alt="Sentimo icon" height="50">
+        <img src="../../assets/logo-text.png" alt="Sentimo text" height="50">
       </a>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
@@ -27,7 +27,7 @@
 
   <!-- 1. Hero GIF -->
   <section class="hero">
-      <img src="/project-sentiment-analysis/assets/dashboard-hero.gif" alt="Sentimo Dashboard Overview" class="img-fluid">
+      <img src="../../assets/dashboard-hero.gif" alt="Sentimo Dashboard Overview" class="img-fluid">
     </section>
 
   <div class="container mt-4">
@@ -80,6 +80,7 @@
       </div>
       <div class="col-md-4">
         <select id="categoryDropdown" class="form-select">
+          <!-- Categories will be dynamically populated here added by the super admin -->
           <option value="all">All Categories</option>
           <option value="fashion">Fashion</option>
           <option value="electronics">Electronics</option>
@@ -92,28 +93,40 @@
 
     <!-- Product Recommendations -->
     <div class="row mt-4" id="productRecommendations">
-      <!-- Sample Product Card -->
-      <?php
-      // Sample products array (replace with dynamic data from the database)
-      $products = [
-        ['id' => 1, 'name' => 'Superstar II Shoes', 'category' => 'Fashion', 'sentiment_score' => 85, 'image' => 'superstar-shoes.jpg'],
-        ['id' => 2, 'name' => 'Smartphone X', 'category' => 'Electronics', 'sentiment_score' => 90, 'image' => 'smartphone-x.jpg']
-      ];
-
-      foreach ($products as $product) {
-        echo '<div class="col-md-4">
-                <div class="card">
-                  <img src="/project-sentiment-analysis/uploads/' . htmlspecialchars($product['image']) . '" class="card-img-top" alt="' . htmlspecialchars($product['name']) . '">
-                  <div class="card-body">
-                    <h5 class="card-title">' . htmlspecialchars($product['name']) . '</h5>
-                    <p class="card-text">Category: ' . htmlspecialchars($product['category']) . '</p>
-                    <p class="card-text">Sentiment Score: ' . htmlspecialchars($product['sentiment_score']) . '%</p>
-                    <button class="btn btn-primary view-product" data-id="' . htmlspecialchars($product['id']) . '" data-name="' . htmlspecialchars($product['name']) . '">View Product</button>
-                  </div>
-                </div>
-              </div>';
-      }
-      ?>
+      <!-- Sample Product Cards -->
+      <div class="col-md-4">
+        <div class="card">
+          <img src="../../uploads/superstar-shoes.png" class="card-img-top" alt="Superstar II Shoes">
+          <div class="card-body">
+            <h5 class="card-title">Superstar II Shoes</h5>
+            <p class="card-text">Category: Fashion</p>
+            <p class="card-text">Sentiment Score: 85%</p>
+            <button class="btn btn-primary view-product" data-id="1" data-name="Superstar II Shoes">View Product Reviews</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <img src="../../uploads/smartphone-x.png" class="card-img-top" alt="Smartphone X">
+          <div class="card-body">
+            <h5 class="card-title">Smartphone X</h5>
+            <p class="card-text">Category: Electronics</p>
+            <p class="card-text">Sentiment Score: 90%</p>
+            <button class="btn btn-primary view-product" data-id="2" data-name="Smartphone X">View Product Reviews</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <img src="../../uploads/gaming-laptop.png" class="card-img-top" alt="Gaming Laptop Pro">
+          <div class="card-body">
+            <h5 class="card-title">Gaming Laptop Pro</h5>
+            <p class="card-text">Category: Computers</p>
+            <p class="card-text">Sentiment Score: 75%</p>
+            <button class="btn btn-primary view-product" data-id="3" data-name="Gaming Laptop Pro">View Product Reviews</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -126,18 +139,64 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <h5 id="modalProductName"></h5>
-          <div id="productComments">
-            <!-- Existing comments will be loaded here dynamically -->
-          </div>
-          <hr>
-          <h6>Add a Comment</h6>
-          <form id="addCommentForm">
-            <div class="mb-3">
-              <textarea class="form-control" id="commentText" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
+          <!-- Product Details -->
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <img id="modalProductImage" src="" alt="Product Image" class="img-fluid rounded">
             </div>
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
-          </form>
+            <div class="col-md-8">
+              <h5 id="modalProductName"></h5>
+              <p id="modalProductCategory" class="text-muted"></p>
+              <div class="d-flex align-items-center">
+                <button id="likeButton" class="btn btn-success btn-sm me-2">
+                  👍 Like <span id="likeCount" class="badge bg-light text-dark">0</span>
+                </button>
+                <button id="unlikeButton" class="btn btn-danger btn-sm">
+                  👎 Unlike <span id="unlikeCount" class="badge bg-light text-dark">0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- User Reviews -->
+          <div id="productComments">
+            <!-- Sample Reviews -->
+            <div class="mb-4">
+              <strong>Taylor Swift</strong>
+              <small class="text-muted">(2025-04-17 12:34:56)</small>
+              <p>⭐⭐⭐⭐⭐ (5/5)</p>
+              <p>Great product! Very comfortable and stylish.</p>
+              <hr>
+              <td>
+                <a href="edit_review.php?id=<?php echo $review['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                <button class="btn btn-sm btn-danger delete-review" data-id="<?php echo $review['id']; ?>">Delete</button>
+              </td>
+            </div>
+            <div class="mb-4">
+              <strong>Kali Uchis</strong>
+              <small class="text-muted">(2025-04-16 10:20:30)</small>
+              <p>⭐⭐⭐⭐ (4/5)</small>
+              <p>Good value for money, but the battery life could be better.</p>
+              <hr>
+              <td>
+                <a href="edit_review.php?id=<?php echo $review['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                <button class="btn btn-sm btn-danger delete-review" data-id="<?php echo $review['id']; ?>">Delete</button>
+              </td>
+            </div>
+            <div class="mb-4">
+              <strong>Sabrina Carpenter</strong>
+              <small class="text-muted">(2025-04-15 15:45:10)</small>
+              <p>⭐⭐⭐ (3/5)</small>
+              <p>Performance is decent, but it overheats during long gaming sessions.</p>
+              <hr>
+              <td>
+                <a href="edit_review.php?id=<?php echo $review['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                <button class="btn btn-sm btn-danger delete-review" data-id="<?php echo $review['id']; ?>">Delete</button>
+              </td>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -145,54 +204,102 @@
 
   <footer class="site-footer">
     <div class="logo-small">
-      <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-      <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+      <img src="../../assets/logo-icon.png" alt="">
+      <img src="../../assets/logo-text.png" alt="">
     </div>
     <ul class="footer-links">
-      <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-      <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+      <li><a href="../../about.php">About</a></li>
+      <li><a href="../../creators.php">Creators</a></li>
     </ul>
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Handle "View Product" button click
-      $('.view-product').on('click', function() {
+      $('.view-product').on('click', function () {
         const productId = $(this).data('id');
         const productName = $(this).data('name');
 
-        // Set product name in the modal
-        $('#modalProductName').text(productName);
-
-        // Fetch existing comments via AJAX
+        // Fetch product details and reviews via AJAX
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_product_comments.php', 
+          url: '/project-sentiment-analysis/api/get_product_reviews.php', // Adjust the path to your API
           method: 'GET',
           data: { product_id: productId },
-          success: function(response) {
-            let commentsHtml = '';
-            response.comments.forEach(comment => {
-              commentsHtml += `
-                <div class="mb-3">
-                  <strong>${comment.user_name}</strong>
-                  <p><strong>Rating:</strong> ${'⭐'.repeat(comment.rating)} (${comment.rating}/5)</p>
-                  <p><strong>Review:</strong> ${comment.comment}</p>
-                  <p><strong>Sentiment:</strong> ${comment.sentiment}</p>
-                  <small class="text-muted">${comment.date}</small>
-                </div>
-                <hr>`;
-            });
-            $('#productComments').html(commentsHtml);
+          success: function (response) {
+            if (response.success) {
+              // Populate product details
+              $('#modalProductImage').attr('src', response.product.image);
+              $('#modalProductName').text(response.product.name);
+              $('#modalProductCategory').text(`Category: ${response.product.category}`);
+              $('#likeCount').text(response.product.likes);
+              $('#unlikeCount').text(response.product.unlikes);
+
+              // Populate user reviews
+              let commentsHtml = '';
+              response.reviews.forEach(review => {
+                commentsHtml += `
+                  <div class="mb-4">
+                    <strong>${review.user_name}</strong>
+                    <small class="text-muted">(${review.timelog})</small>
+                    <p>${'⭐'.repeat(review.rating)} (${review.rating}/5)</p>
+                    <p>${review.comment}</p>
+                    <hr>
+                  </div>`;
+              });
+              $('#productComments').html(commentsHtml);
+            } else {
+              $('#productComments').html('<p class="text-danger">Failed to load reviews. Please try again later.</p>');
+            }
           },
-          error: function() {
-            $('#productComments').html('<p class="text-danger">Failed to load comments. Please try again later.</p>');
+          error: function () {
+            $('#productComments').html('<p class="text-danger">An error occurred. Please try again later.</p>');
           }
         });
 
         // Show the modal
         $('#productReviewModal').modal('show');
+      });
+
+      // Handle Like Button Click
+      $('#likeButton').on('click', function () {
+        const productId = $('#modalProductName').data('id');
+        $.ajax({
+          url: '/project-sentiment-analysis/api/like_product.php', // Adjust the path to your API
+          method: 'POST',
+          data: { product_id: productId },
+          success: function (response) {
+            if (response.success) {
+              $('#likeCount').text(response.likes);
+            } else {
+              alert('Failed to like the product. Please try again.');
+            }
+          },
+          error: function () {
+            alert('An error occurred. Please try again.');
+          }
+        });
+      });
+
+      // Handle Unlike Button Click
+      $('#unlikeButton').on('click', function () {
+        const productId = $('#modalProductName').data('id');
+        $.ajax({
+          url: '/project-sentiment-analysis/api/unlike_product.php', // Adjust the path to your API
+          method: 'POST',
+          data: { product_id: productId },
+          success: function (response) {
+            if (response.success) {
+              $('#unlikeCount').text(response.unlikes);
+            } else {
+              alert('Failed to unlike the product. Please try again.');
+            }
+          },
+          error: function () {
+            alert('An error occurred. Please try again.');
+          }
+        });
       });
 
       // Handle comment submission
@@ -254,3 +361,49 @@
   </script>
 </body>
 </html>
+
+<?php
+require_once '../../db_connection.php'; // Adjust the path to your DB connection file
+
+header('Content-Type: application/json');
+
+if (isset($_GET['product_id'])) {
+    $productId = intval($_GET['product_id']);
+
+    // Fetch product details
+    $productQuery = "SELECT name, category, image, likes, unlikes FROM products WHERE id = ?";
+    $stmt = $conn->prepare($productQuery);
+    $stmt->bind_param("i", $productId);
+    $stmt->execute();
+    $productResult = $stmt->get_result();
+
+    if ($productResult->num_rows > 0) {
+        $product = $productResult->fetch_assoc();
+
+        // Fetch product reviews
+        $reviewsQuery = "SELECT u.name AS user_name, r.timelog, r.rating, r.comment, r.id
+                         FROM reviews r
+                         JOIN users u ON r.user_id = u.id
+                         WHERE r.product_id = ?";
+        $stmt = $conn->prepare($reviewsQuery);
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $reviewsResult = $stmt->get_result();
+
+        $reviews = [];
+        while ($row = $reviewsResult->fetch_assoc()) {
+            $reviews[] = $row;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'product' => $product,
+            'reviews' => $reviews
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Product not found.']);
+    }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid product ID.']);
+}
+?>

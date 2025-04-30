@@ -1109,3 +1109,31 @@ body {
   background: #E28A8A;
   color: #FFF;
 }
+
+/* Rating Stars */
+.rating {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.rating input[type="radio"] {
+  display: none;
+}
+
+.rating label {
+  font-size: 2rem;
+  color: #ffd700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  transform: scale(1.2);
+}
+
+.rating input[type="radio"]:checked ~ label {
+  color: #ffa500;
+}

@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — Submit Review</title>
+  <title>Sentimo — Edit Review</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
@@ -32,11 +32,11 @@
     </section>
 
      <!-- 2) Submit Review Form -->
-     <h2>Review a Product</h2>
+     <h2>Edit My Review</h2>
      <section class="review-wrapper">
       <div class="review-card">
-        <h2>Review Form</h2>
-        <p class="subhead">Write your Review</p>
+        <h2>Edit Review Form</h2>
+        <p class="subhead">Edit your Review</p>
         <form action="#" method="POST">
           <!-- Category Dropdown -->
           <div class="mb-3">
@@ -73,7 +73,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="btn btn-primary">Submit Review</button>
+          <button type="submit" class="btn btn-primary">Edit Review</button>
         </form>
       </div>
     </section>

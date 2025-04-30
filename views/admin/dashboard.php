@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -179,6 +180,54 @@ fetch('analyze_reviews.php')
       </table>
     </section>
 
+    <!-- 4) Product Reviews Table -->
+    <h2>Product Reviews</h2>
+    <section class="reviews-table" style="width: 100%; overflow-x: auto;">
+      <table id="reviewsTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>User</th>
+            <th style="width: 130px;">Rating</th>
+            <th style="width: 300px;">Review</th>
+            <th>Sentiment</th>
+            <th>Timelog</th>
+            <th>Discard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Reviews will be dynamically populated here -->
+          <tr>
+            <td>Superstar II Shoes</td>
+            <td>Taylor Swift</td>
+            <td>⭐⭐⭐⭐⭐</td>
+            <td>Great product! Very comfortable.</td>
+            <td>Positive</td>
+            <td>2025-04-17 12:34:56</td>
+            <td><button class="btn btn-danger btn-sm discard-review" data-id="1">Discard</button></td>
+          </tr>
+          <tr>
+            <td>Smartphone X</td>
+            <td>Kali Uchis</td>
+            <td>⭐⭐⭐</td>
+            <td>Good performance but battery life could be better.</td>
+            <td>Neutral</td>
+            <td>2025-04-16 10:20:30</td>
+            <td><button class="btn btn-danger btn-sm discard-review" data-id="2">Discard</button></td>
+          </tr>
+          <tr>
+            <td>Ultra Stretch Pants</td>
+            <td>Sabrina Carpenter</td>
+            <td>⭐⭐⭐⭐⭐</td>
+            <td>Perfect fit and very durable.</td>
+            <td>Positive</td>
+            <td>2025-04-15 15:45:10</td>
+            <td><button class="btn btn-danger btn-sm discard-review" data-id="3">Discard</button></td> 
+          </tr>
+        </tbody>
+      </table>
+    </section>
+     
   </main>
 
   <footer class="site-footer">
@@ -196,16 +245,86 @@ fetch('analyze_reviews.php')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
+      // Initialize DataTables for Product List Table
       $('#productTable').DataTable({
         paging: true,
         searching: true,
         ordering: true,
         lengthChange: true,
         pageLength: 10,
-        autoWidth: false
+        autoWidth: false,
+      });
+
+      // Initialize DataTables for Product Reviews Table
+      $('#reviewsTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        lengthChange: true,
+        pageLength: 10,
+        autoWidth: false,
+      });
+
+      // Fetch and populate reviews on page load
+      function fetchReviews() {
+        $.ajax({
+          url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
+          method: 'GET',
+          success: function (response) {
+            if (response.success) {
+              const reviewsTable = $('#reviewsTable').DataTable();
+              reviewsTable.clear(); // Clear existing rows
+              response.reviews.forEach(function (review) {
+                reviewsTable.row.add([
+                  review.product_name,
+                  review.user_name,
+                  '★'.repeat(review.rating),
+                  review.review,
+                  review.sentiment,
+                  review.timelog,
+                  `<button class="btn btn-danger btn-sm discard-review" data-id="${review.id}">Discard</button>`,
+                ]);
+              });
+              reviewsTable.draw(); // Redraw the table with new data
+            } else {
+              alert('Failed to fetch reviews.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while fetching reviews.');
+          },
+        });
+      }
+
+      // Call fetchReviews on page load
+      fetchReviews();
+
+      // Handle Discard Review Action
+      $(document).on('click', '.discard-review', function () {
+        const reviewId = $(this).data('id');
+        if (confirm('Are you sure you want to discard this review?')) {
+          $.ajax({
+            url: '/project-sentiment-analysis/api/discard_review.php', // Adjust the path to your API
+            method: 'POST',
+            data: { id: reviewId },
+            success: function (response) {
+              if (response.success) {
+                alert('Review discarded successfully.');
+                fetchReviews(); // Refresh the reviews table
+              } else {
+                alert('Failed to discard review.');
+              }
+            },
+            error: function () {
+              alert('An error occurred while discarding the review.');
+            },
+          });
+        }
       });
     });
   </script>

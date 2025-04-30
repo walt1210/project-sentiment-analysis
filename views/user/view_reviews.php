@@ -14,8 +14,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-        <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
-        <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
+        <img src="../../assets/logo-icon.png" alt="Sentimo icon" height="50">
+        <img src="../../assets/logo-text.png" alt="Sentimo text" height="50">
       </a>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="submit_review.php">Submit Review</a></li>
@@ -28,7 +28,7 @@
   <main class="viewReview-page">
     <!-- 1) Hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/view-reviews-hero.gif" alt="Sentimo View Reviews" class="img-fluid">
+      <img src="../../assets/view-reviews-hero.gif" alt="Sentimo View Reviews" class="img-fluid">
     </section>
 
     <!-- 2) Reviews Table -->
@@ -81,14 +81,51 @@
     </div>
   </main>
 
+  <!-- Edit Review Modal -->
+  <div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editReviewModalLabel">Edit Review</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Review Form -->
+          <form id="editReviewForm" action="#" method="POST">
+            <input type="hidden" id="reviewId" name="review_id"> <!-- Hidden field for review ID -->
+            <div class="mb-3">
+              <label for="productName" class="form-label">Product</label>
+              <input type="text" id="productName" class="form-control" name="product_name" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <div class="rating">
+                <input type="radio" id="editStar5" name="rating" value="5"><label for="editStar5">★</label>
+                <input type="radio" id="editStar4" name="rating" value="4"><label for="editStar4">★</label>
+                <input type="radio" id="editStar3" name="rating" value="3"><label for="editStar3">★</label>
+                <input type="radio" id="editStar2" name="rating" value="2"><label for="editStar2">★</label>
+                <input type="radio" id="editStar1" name="rating" value="1"><label for="editStar1">★</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="reviewText" class="form-label">Review</label>
+              <textarea id="reviewText" class="form-control" name="review" rows="6" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Edit Review</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="logo-small">
-      <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-      <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+      <img src="../../assets/logo-icon.png" alt="">
+      <img src="../../assets/logo-text.png" alt="">
     </div>
     <ul class="footer-links">
-        <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-        <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+        <li><a href="../../about.php">About</a></li>
+        <li><a href="../../creators.php">Creators</a></li>
     </ul>
   </footer>
 
@@ -121,6 +158,64 @@
         const reviewId = $(this).data('id');
         alert('Edit review with ID ' + reviewId + ' (sample action).');
         // Backend integration: Redirect to an edit review page or open a modal for editing
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      // Handle Edit Review Button Click
+      $('.edit-review').on('click', function () {
+        const reviewId = $(this).data('id');
+
+        // Fetch review details via AJAX
+        $.ajax({
+          url: '/project-sentiment-analysis/api/get_review.php', // Adjust the path to your API
+          method: 'GET',
+          data: { id: reviewId },
+          success: function (response) {
+            if (response.success) {
+              // Populate the modal with review data
+              $('#reviewId').val(response.review.id);
+              $('#productName').val(response.review.product_name);
+              $(`input[name="rating"][value="${response.review.rating}"]`).prop('checked', true);
+              $('#reviewText').val(response.review.comment);
+
+              // Show the modal
+              $('#editReviewModal').modal('show');
+            } else {
+              alert('Failed to fetch review details.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while fetching review details.');
+          },
+        });
+      });
+
+      // Handle Edit Review Form Submission
+      $('#editReviewForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const formData = $(this).serialize();
+
+        // Submit the edited review via AJAX
+        $.ajax({
+          url: '/project-sentiment-analysis/api/edit_review.php', // Adjust the path to your API
+          method: 'POST',
+          data: formData,
+          success: function (response) {
+            if (response.success) {
+              alert('Review updated successfully.');
+              $('#editReviewModal').modal('hide');
+              location.reload(); // Reload the page to reflect changes
+            } else {
+              alert('Failed to update review.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while updating the review.');
+          },
+        });
       });
     });
   </script>
