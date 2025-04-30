@@ -94,6 +94,7 @@ CREATE TABLE product_votes(
 
 INSERT INTO roles (name) VALUES ('standard');
 INSERT INTO roles (name) VALUES ('administrator');
+INSERT INTO roles (name) VALUES ('super admin');
 
 INSERT INTO users (email, first_name, last_name, password_, role_id)
     VALUES ('walteru270@gmail.com', 'Walter', 'Ursua', '12345678', '2');
@@ -128,5 +129,3 @@ LEFT JOIN sentiments ON product_reviews.id = sentiments.product_review_id
 LEFT JOIN users ON product_reviews.user_id = users.id
 -- FOR FILTERING
 WHERE product_reviews.product_id = '1' AND sentiments.type = 'negative'
-
---edit lang
