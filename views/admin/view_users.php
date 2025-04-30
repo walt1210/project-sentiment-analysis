@@ -8,14 +8,14 @@
   <title>Sentimo — View Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
-  <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
+  <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
-          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
+          <img src="../../assets/logo-icon.png" alt="Sentimo icon" height="50">
+          <img src="../../assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
@@ -43,7 +43,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
-            <th>Role ID</th>
+            <th>Role</th> <!-- Changed from "Role ID" to "Role" -->
             <th>Last Login</th>
           </tr>
         </thead>
@@ -53,21 +53,21 @@
             <td>001</td>
             <td>Taylor Swift</td>
             <td>taylor.swift@gmail.com</td>
-            <td>1</td> <!-- Role ID: 2 (User) -->
+            <td>Super Admin</td> <!-- Role displayed as "Super Admin" -->
             <td>2025-04-17 12:34:56</td>
           </tr>
           <tr>
             <td>002</td>
             <td>Kali Uchis</td>
             <td>kali.uchis@gmail.com</td>
-            <td>2</td> <!-- Role ID: 2 (User) -->
+            <td>Administrator</td> <!-- Role displayed as "Administrator" -->
             <td>2025-04-16 10:20:30</td>
           </tr>
           <tr>
             <td>003</td>
             <td>Sabrina Carpenter</td>
             <td>sabrina.carpenter@gmail.com</td>
-            <td>1</td> <!-- Role ID: 1 (Admin) -->
+            <td>User</td> <!-- Role displayed as "User" -->
             <td>2025-04-15 15:45:10</td>
           </tr>
         </tbody>
@@ -78,12 +78,12 @@
 
   <footer class="site-footer">
     <div class="logo-small">
-      <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-      <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+      <img src="../../assets/logo-icon.png" alt="">
+      <img src="../../assets/logo-text.png" alt="">
     </div>
     <ul class="footer-links">
-      <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-      <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+      <li><a href="../../about.php">About</a></li>
+      <li><a href="../../creators.php">Creators</a></li>
     </ul>
   </footer>
 

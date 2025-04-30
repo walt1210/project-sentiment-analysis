@@ -168,7 +168,7 @@ fetch('analyze_reviews.php')
             <td>Fashion</td>
             <td>₱5,500</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
               <button class="btn btn-danger btn-sm">Delete</button>
               <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
             </td>
@@ -179,7 +179,7 @@ fetch('analyze_reviews.php')
             <td>Electronics</td>
             <td>₱25,000</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
               <button class="btn btn-danger btn-sm">Delete</button>
               <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
             </td>

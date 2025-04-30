@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — Add Products</title>
+  <title>Sentimo — Edit Product</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
@@ -26,33 +26,36 @@
 
   <main class="addProduct-page">
 
-    <!-- 1) Hero GIF -->
-    <section class="hero">
-      <img src="/project-sentiment-analysis/assets/add-product-gif.gif" alt="Sentimo Add Product">
-    </section>
-
-    <!-- 2) Add Product Form -->
+    <!-- 2) Edit Product Form -->
     <section class="addProduct-wrapper">
       <div class="addProduct-card">
-        <h2>Add Product Form</h2>
-        <p class="subhead">Add a new product</p>
-        <form id="addProductForm" enctype="multipart/form-data">
-          <input type="text" name="product_name" placeholder="Product Name" required>
-          <input type="text" name="price" placeholder="Price" required>
+        <h2>Edit Product Form</h2>
+        <p class="subhead">Edit the product details</p>
+        <form id="editProductForm" enctype="multipart/form-data">
+          <!-- Product Name -->
+          <input type="text" id="product_name" name="product_name" placeholder="Product Name" required>
+
+          <!-- Price -->
+          <input type="text" id="price" name="price" placeholder="Price" required>
+
           <!-- Category Dropdown -->
           <div class="form-group">
             <select id="category" name="category" class="form-control" required>
               <option value="">Select Category</option>
-              <option value="others">Others</option>
+              <!-- Categories will be dynamically populated -->
             </select>
           </div>
+
+          <!-- Image Upload -->
           <label for="image-upload" class="upload-box">
             <img src="/project-sentiment-analysis/assets/upload-image-icon.png" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
-            <input type="file" id="image-upload" name="product_image" accept=".png" hidden required>
+            <input type="file" id="image-upload" name="product_image" accept=".png" hidden>
           </label>
           <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: 100%; margin-top: 10px;">
-          <button type="submit" class="btn btn-primary">ADD PRODUCT</button>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary">UPDATE PRODUCT</button>
         </form>
       </div>
     </section>
@@ -73,14 +76,40 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready(function () {
-      // Fetch and populate categories on page load
+      // Fetch product details and populate the form
+      function fetchProductDetails(productId) {
+        $.ajax({
+          url: '/project-sentiment-analysis/api/get_product.php', // Adjust the path to your API
+          method: 'GET',
+          data: { id: productId },
+          success: function (response) {
+            if (response.success) {
+              // Populate the form fields with product data
+              $('#product_name').val(response.product.name);
+              $('#price').val(response.product.price);
+              $('#category').val(response.product.category_id);
+              if (response.product.image) {
+                $('#image-preview').attr('src', response.product.image).show();
+                $('#preview-icon').hide();
+                $('#upload-text').hide();
+              }
+            } else {
+              alert('Failed to fetch product details.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while fetching product details.');
+          },
+        });
+      }
+
+      // Fetch categories and populate the dropdown
       function fetchCategories() {
         $.ajax({
           url: '/project-sentiment-analysis/api/get_categories.php', // Adjust the path to your API
           method: 'GET',
           success: function (response) {
             if (response.success) {
-              // Populate the dropdown with categories
               response.categories.forEach(function (category) {
                 $('#category').append(`<option value="${category.id}">${category.name}</option>`);
               });
@@ -94,47 +123,35 @@
         });
       }
 
-      // Call fetchCategories on page load
-      fetchCategories();
+      // Get the product ID from the URL query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
 
-      // Handle image preview
-      $('#image-upload').on('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            $('#image-preview').attr('src', e.target.result).show(); 
-            $('#preview-icon').hide(); 
-            $('#upload-text').show();
-          };
-          reader.readAsDataURL(file); 
-        } else {
-          $('#image-preview').hide(); 
-          $('#preview-icon').show(); 
-          $('#upload-text').show(); 
-        }
-      });
+      if (productId) {
+        fetchProductDetails(productId); // Fetch product details
+        fetchCategories(); // Fetch categories
+      } else {
+        alert('No product ID provided.');
+      }
 
-      // Handle Add Product Form Submission
-      $('#addProductForm').on('submit', function (e) {
+      // Handle Edit Product Form Submission
+      $('#editProductForm').on('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
+        formData.append('id', productId); // Include the product ID
 
         $.ajax({
-          url: '/project-sentiment-analysis/api/add_product.php', // Adjust the path to your API
+          url: '/project-sentiment-analysis/api/update_product.php', // Adjust the path to your API
           method: 'POST',
           data: formData,
           processData: false,
           contentType: false,
           success: function (response) {
             if (response.success) {
-              alert('Product added successfully.');
-              $('#addProductForm')[0].reset();
-              $('#image-preview').hide();
-              $('#preview-icon').show();
-              $('#upload-text').show();
+              alert('Product updated successfully.');
+              window.location.href = 'dashboard.php'; // Redirect to dashboard
             } else {
-              alert('Failed to add product. Please try again.');
+              alert('Failed to update product. Please try again.');
             }
           },
           error: function () {

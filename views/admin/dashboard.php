@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/project-sentiment-analysis/assets/styles.css?v=2">
+  <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="dashboard.php">
-          <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="Sentimo icon" height="50">
-          <img src="/project-sentiment-analysis/assets/logo-text.png" alt="Sentimo text" height="50">
+          <img src="../../assets/logo-icon.png" alt="Sentimo icon" height="50">
+          <img src="../../assets/logo-text.png" alt="Sentimo text" height="50">
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
@@ -140,28 +140,28 @@ fetch('analyze_reviews.php')
 </script> -->
 
 <!-- 3) Products Table -->
-    <h2>Product List</h2>
-    <section class="product-table">
-      <table id="productTable" class="table table-striped table-bordered" style="width:100%">
+<h2>Product List</h2>
+    <section class="product-table" style="width: 100%; overflow-x: auto;">
+      <table id="productTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
         <thead>
           <tr>
-            <th>ID</th>
+            <th style="width: 100px;">ID</th>
             <th>Product Name</th>
             <th>Category</th>
             <th>Price</th>
-            <th>Actions</th>
+            <th style="width: 275px;">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Example rows, replace with dynamic PHP data -->
           <tr>
             <td>1</td>
             <td>Superstar II Shoes</td>
             <td>Fashion</td>
             <td>₱5,500</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
               <button class="btn btn-danger btn-sm">Delete</button>
+              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
             </td>
           </tr>
           <tr>
@@ -170,8 +170,9 @@ fetch('analyze_reviews.php')
             <td>Electronics</td>
             <td>₱25,000</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
               <button class="btn btn-danger btn-sm">Delete</button>
+              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
             </td>
           </tr>
         </tbody>
@@ -182,12 +183,12 @@ fetch('analyze_reviews.php')
 
   <footer class="site-footer">
     <div class="logo-small">
-      <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-      <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+      <img src="../../assets/logo-icon.png" alt="">
+      <img src="../../assets/logo-text.png" alt="">
     </div>
     <ul class="footer-links">
-      <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-      <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+      <li><a href="../../about.php">About</a></li>
+      <li><a href="../../creators.php">Creators</a></li>
     </ul>
   </footer>
 
@@ -203,7 +204,8 @@ fetch('analyze_reviews.php')
         searching: true,
         ordering: true,
         lengthChange: true,
-        pageLength: 10
+        pageLength: 10,
+        autoWidth: false
       });
     });
   </script>
