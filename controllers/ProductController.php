@@ -24,15 +24,16 @@ class ProductController{
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $name = $_POST["name"];
             $category_id = $_POST["category_id"];
+            $price = $_POST["price"];
             $description = $_POST["description"];
             $image_url = $_POST["image"];
 
-            if(empty($name) || empty($category_id) || empty($description) || empty($image_url)){
+            if(empty($name) || empty($category_id) || empty($description) || empty($price) || empty($image_url)){
                 return ["success" => false, "message" => "Please fill up all empty fields!"] ;
                 //echo json_encode(["success" => false, "message" => "Please fill up all empty fields!"]);
             }
             else{
-                $success = $this->ProductModel->add($name, $category_id, $description, $image_url);
+                $success = $this->ProductModel->add($name, $category_id, $price, $description, $image_url);
                 $msg = ($success) ? "Added succesfully!" : "Failed to add";
                 return ["success"=> $success,"message"=> $msg];
                 //echo json_encode(["success"=> $success,"message"=> "Added succesfully!"]);
@@ -45,15 +46,16 @@ class ProductController{
             $id = $_POST["id"];
             $name = $_POST["name"];
             $category_id = $_POST["category_id"];
+            $price = $_POST["price"];
             $description = $_POST["description"];
             $image_url = $_POST["image"];
 
-            if(empty($name) || empty($category_id) || empty($description) || empty($image_url) || empty(($id))){
+            if(empty($name) || empty($category_id) || empty($description) || empty($price) || empty($image_url) || empty(($id))){
                 return ["success" => false, "message" => "Please fill up all empty fields!"] ;
                 //echo json_encode(["success" => false, "message" => "Please fill up all empty fields!"]);
             }
             else{
-                $success = $this->ProductModel->update($id , $name, $category_id, $description, $image_url);
+                $success = $this->ProductModel->update($id , $name, $category_id, $price,$description, $image_url);
                 $msg = ($success) ? "Updated succesfully!" : "Failed to update";
                 return ["success"=> $success,"message"=> $msg];
                 // echo json_encode(["success"=> $success,"message"=> "Updated succesfully!"]);

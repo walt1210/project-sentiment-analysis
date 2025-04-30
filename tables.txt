@@ -30,12 +30,13 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     category_id INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
     description VARCHAR(100) NOT NULL,
     image_url VARCHAR(100) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-CREATE TABLE product_reviews (
+CREATE TABLE product_review_comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -45,10 +46,6 @@ CREATE TABLE product_reviews (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
-
-
-
-
 CREATE TABLE positive_words(
     words VARCHAR(100) NOT NULL
 );
@@ -57,28 +54,13 @@ CREATE TABLE negative_words(
     words VARCHAR(100) NOT NULL
 );
 
-
-
-
 CREATE TABLE sentiments (
     product_review_id INT PRIMARY KEY,
     positive_count INT NOT NULL,
     negative_count INT NOT NULL,
     percentage DECIMAL(5,2) NOT NULL,
     type ENUM('positive', 'negative', 'neutral') NOT NULL,
-    FOREIGN KEY (product_review_id) REFERENCES product_reviews(id)
-);
-
-
-
-
-CREATE TABLE product_review_comments(
-    user_id INT NOT NULL, 
-    product_review_id INT NOT NULL,
-    comment VARCHAR(200) NOT NULL,
-    FOREIGN KEY (product_review_id) REFERENCES product_reviews(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    PRIMARY KEY (user_id, product_review_id)
+    FOREIGN KEY (product_review_id) REFERENCES product_review_comments(id)
 );
 
 
@@ -97,18 +79,18 @@ INSERT INTO roles (name) VALUES ('administrator');
 INSERT INTO roles (name) VALUES ('super admin');
 
 INSERT INTO users (email, first_name, last_name, password_, role_id)
-    VALUES ('walteru270@gmail.com', 'Walter', 'Ursua', '12345678', '2');
+    VALUES ('walteru270@gmail.com', 'Walter', 'Ursua', '25d55ad283aa400af464c76d713c07ad', '3');
 
 INSERT INTO categories (name) VALUES ('sports');
 INSERT INTO categories (name) VALUES ('personal care');
 
-INSERT INTO products (name, category_id, description, image_url)
-    VALUES ('baby powder', '2', '500g', 'sample_url');
+INSERT INTO products (name, category_id, price, description, image_url)
+    VALUES ('baby powder', '2', '50' , '500g', 'sample_url');
 
-INSERT INTO products (name, category_id, description, image_url)
-    VALUES ('basketball', '1', 'high quality', 'sample_url');
+INSERT INTO products (name, category_id, price, description, image_url)
+    VALUES ('basketball', '1', '1000' ,'high quality', 'sample_url');
 
-INSERT INTO product_reviews (user_id, product_id, rating, review_text)
+INSERT INTO product_review_comments (user_id, product_id, rating, review_text)
     VALUES ('1', '1', '5', 'has a good quality');
 
 INSERT INTO sentiments (product_review_id, positive_count, negative_count, percentage, type)
@@ -116,16 +98,17 @@ INSERT INTO sentiments (product_review_id, positive_count, negative_count, perce
 
 SELECT
     products.name AS 'product_name',
+    products.price,
     categories.name AS 'category_name',
     users.email,
-    product_reviews.rating,
-    product_reviews.review_text,
+    product_review_comments.rating,
+    product_review_comments.review_text,
     sentiments.percentage,
     sentiments.type
-FROM product_reviews
-LEFT JOIN products ON product_reviews.id = products.id
+FROM product_review_comments
+LEFT JOIN products ON product_review_comments.id = products.id
 LEFT JOIN categories ON products.category_id = categories.id
-LEFT JOIN sentiments ON product_reviews.id = sentiments.product_review_id
-LEFT JOIN users ON product_reviews.user_id = users.id
+LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
+LEFT JOIN users ON product_review_comments.user_id = users.id
 -- FOR FILTERING
 WHERE product_reviews.product_id = '1' AND sentiments.type = 'negative'

@@ -1,3 +1,4 @@
+
 <?php
 require_once __DIR__ ."/../config.php";
 
@@ -13,9 +14,9 @@ class ProductModel{
     }
 
     //create new product
-    public function add($name, $category_id, $description, $image_url){
-        $stmt = $this->conn->prepare("INSERT INTO products (`name`, category_id, `description`, image_url) VALUES (?,?,?,?)");
-        $stmt->bind_param("siss", $name, $category_id, $description, $image_url);
+    public function add($name, $category_id, $price, $description, $image_url){
+        $stmt = $this->conn->prepare("INSERT INTO products (`name`, category_id, price, `description`, image_url) VALUES (?,?,?,?)");
+        $stmt->bind_param("sidss", $name, $category_id, $price, $description, $image_url);
         //$this->conn->insert_id;
         return $stmt->execute();
     }
@@ -27,9 +28,9 @@ class ProductModel{
     }
 
     //update products
-    public function update($id, $name, $category_id, $description, $image_url){
-        $stmt = $this->conn->prepare("UPDATE products SET `name` = ?, category_id=?, `description`=?, image_url=? WHERE id = ?");
-        $stmt->bind_param("sissi", $name, $category_id, $description, $image_url, $id);
+    public function update($id, $name, $category_id, $price, $description, $image_url){
+        $stmt = $this->conn->prepare("UPDATE products SET `name` = ?, category_id=?, price=?, `description`=?, image_url=? WHERE id = ?");
+        $stmt->bind_param("sidssi", $name, $category_id, $price, $description, $image_url, $id);
         return $stmt->execute();
     }
 

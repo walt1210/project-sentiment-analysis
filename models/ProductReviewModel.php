@@ -18,7 +18,7 @@ class ProductReviewModel{
 
     //create new product review
     public function add($user_id, $product_id, $rating, $review_text){
-        $stmt = $this->conn->prepare("INSERT INTO product_reviews (user_id, product_id, rating, review_text) VALUES (?,?,?,?)");
+        $stmt = $this->conn->prepare("INSERT INTO product_review_comments (user_id, product_id, rating, review_text) VALUES (?,?,?,?)");
         $stmt->bind_param("iiis",$user_id, $product_id, $rating, $review_text);
         //$this->conn->insert_id;
         //if there are no existing review
@@ -33,7 +33,7 @@ class ProductReviewModel{
 
     //retrieve all product review
     public function getAll(){
-        $result =$this->conn->query("SELECT * FROM product_reviews");
+        $result =$this->conn->query("SELECT * FROM product_review_comments");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -60,15 +60,15 @@ class ProductReviewModel{
                 products.name AS 'product_name',
                 categories.name AS 'category_name',
                 users.email,
-                product_reviews.rating,
-                product_reviews.review_text,
+                product_review_comments.rating,
+                product_review_comments.review_text,
                 sentiments.percentage,
                 sentiments.type
-            FROM product_reviews
-            LEFT JOIN products ON product_reviews.id = products.id
+            FROM product_review_comments
+            LEFT JOIN products ON product_review_comments.id = products.id
             LEFT JOIN categories ON products.category_id = categories.id
-            LEFT JOIN sentiments ON product_reviews.id = sentiments.product_review_id
-            LEFT JOIN users ON product_reviews.user_id = users.id
+            LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
+            LEFT JOIN users ON product_review_comments.user_id = users.id
             $filter
             ";
         $result = $this->conn->query($sql);
@@ -77,7 +77,7 @@ class ProductReviewModel{
 
     //get product review row
     public function getByIds($user_id, $product_id){
-        $stmt = $this->conn->prepare("SELECT * FROM product_reviews WHERE user_id = ? AND product_id = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM product_review_comments WHERE user_id = ? AND product_id = ?");
         $stmt->bind_param("ii", $user_id, $product_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -94,7 +94,7 @@ class ProductReviewModel{
 
     //update product review
     public function update($id, $user_id, $product_id, $rating, $review_text){
-        $stmt = $this->conn->prepare("UPDATE product_reviews SET rating=?, review_text=? WHERE user_id=? AND product_id=? AND id=?");
+        $stmt = $this->conn->prepare("UPDATE product_review_comments SET rating=?, review_text=? WHERE user_id=? AND product_id=? AND id=?");
         $stmt->bind_param("isiii", $rating, $review_text, $user_id, $product_id, $id);
         $success = $stmt->execute();
         if($success && ($stmt->affected_rows==1)){
@@ -108,7 +108,7 @@ class ProductReviewModel{
 
     //delete product review
     public function delete($id){
-        $stmt = $this->conn->prepare("DELETE FROM product_reviews WHERE id = ?");
+        $stmt = $this->conn->prepare("DELETE FROM product_review_comments WHERE id = ?");
         $stmt->bind_param("s", $id); 
         //$success = $stmt->execute();
         //$SentimentModel = new Sentiment(); 
