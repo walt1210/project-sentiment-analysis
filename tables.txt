@@ -96,6 +96,8 @@ INSERT INTO product_review_comments (user_id, product_id, rating, review_text)
 INSERT INTO sentiments (product_review_id, positive_count, negative_count, percentage, type)
     VALUES ('1', '1', '0', '100', 'positive');
 
+INSERT INTO product_votes (user_id, product_id, vote) VALUES ('1', '1', 'like');
+
 SELECT
     products.name AS 'product_name',
     products.price,
@@ -111,4 +113,13 @@ LEFT JOIN categories ON products.category_id = categories.id
 LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
 LEFT JOIN users ON product_review_comments.user_id = users.id
 -- FOR FILTERING
-WHERE product_reviews.product_id = '1' AND sentiments.type = 'negative'
+WHERE product_review_comments.product_id = '1' AND sentiments.type = 'negative'
+
+SELECT
+CONCAT(users.first_name, ' ', users.last_name) AS user_name,
+products.name,
+product_review_comments.rating,
+product_review_comments.review_text
+FROM product_review_comments
+LEFT JOIN users ON product_review_comments.user_id = users.id
+LEFT JOIN products on product_review_comments.product_id = products.id
