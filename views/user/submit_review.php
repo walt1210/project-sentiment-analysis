@@ -1,5 +1,9 @@
 <?php
   require_once __DIR__ . '/session.php';
+
+  $category_id = isset($_GET['category']) ? $_GET['category'] : null;
+  $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,17 +99,24 @@
   <script>
     $(document).ready(function () {
       // Fetch categories from the backend
-      function fetchCategories() {
+      function fetchCategories(selectedCategoryID = null) {
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_categories.php', // Adjust the path to your API
+          url: './../../controllers/get_categories.php', // Adjust the path to your API
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
-            if (response.success) {
+            if (response.length > 0) {
               const categoryDropdown = $('#categoryDropdown');
               categoryDropdown.empty();
-              categoryDropdown.append('<option value="" disabled selected>Select Category</option>');
-              response.categories.forEach(function (category) {
-                categoryDropdown.append(`<option value="${category.id}">${category.name}</option>`);
+              categoryDropdown.append('<option value="" selected>All Category</option>');
+              response.forEach(function (category) {
+                var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase())
+                categoryDropdown.append(`<option value="${category.id}" data-category_id="${category.id}">${c_name}</option>`);
+              
+                if (selectedCategoryID) {
+                  categoryDropdown.val(selectedCategoryID);
+                }
+              
               });
             } else {
               alert('Failed to fetch categories.');
@@ -117,21 +128,31 @@
         });
       }
 
-      // Fetch products based on the selected category
-      $('#categoryDropdown').on('change', function () {
-        const categoryId = $(this).val();
+
+      function fetchProducts(categoryID = null, productID=null) {
+        
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_products.php', // Adjust the path to your API
+          url: './../../controllers/get_products.php', // Adjust the path to your API
           method: 'GET',
-          data: { category_id: categoryId },
+          dataType: 'json',
           success: function (response) {
             if (response.success) {
               const productDropdown = $('#productDropdown');
               productDropdown.empty();
               productDropdown.append('<option value="" disabled selected>Select Product</option>');
-              response.products.forEach(function (product) {
-                productDropdown.append(`<option value="${product.id}">${product.name}</option>`);
+              response.data.forEach(function (product) {
+                console.log(product.category_id, categoryID) ;
+
+                if(!categoryID || product.category_id == categoryID){
+                  var p_name = product.name.replace(/\b\w/g, char => char.toUpperCase())
+                  productDropdown.append(`<option value="${product.id}">${p_name}</option>`);
+               
+                }
+                
               });
+              if (productID) {
+                productDropdown.val(productID);
+              }
             } else {
               alert('Failed to fetch products.');
             }
@@ -140,11 +161,22 @@
             alert('An error occurred while fetching products.');
           },
         });
-      });
+      }
 
-      // Initialize categories on page load
-      fetchCategories();
+
+      fetchCategories( <?php echo json_encode($category_id); ?>);
+      fetchProducts(<?php echo json_encode($category_id); ?>, <?php echo json_encode($product_id); ?>);
+
+
+      // Fetch products based on the selected category
+      $('#categoryDropdown').on('change', function () {
+        const categoryID = $(this).val() ? $(this).val() : null;
+        fetchProducts(categoryID);
+      });
+    
+      
     });
+    
   </script>
 </body>
 </html>

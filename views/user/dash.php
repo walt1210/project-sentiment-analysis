@@ -246,7 +246,7 @@
 
                     $('#likeButton').data('product-id', product_id); 
                     $('#unlikeButton').data('product-id', product_id);
-                    $('#btnComment').data('href', `submit_review.php?product_id=${product_id}&category=${ctgry[response.data.category_id]}`); // Set the data attribute for the button
+                    $('#btnComment').data('href', `submit_review.php?product_id=${product_id}&category=${response.data.category_id}`); // Set the data attribute for the button
 
                     //console.log($('#likeButton').data('product-id'));
 
