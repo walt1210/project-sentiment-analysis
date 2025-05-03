@@ -97,6 +97,12 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        location.reload(); // Reloads page and re-triggers PHP
+      }
+    });
+
     $(document).ready(function () {
       // Fetch categories from the backend
       function fetchCategories(selectedCategoryID = null) {
@@ -177,13 +183,14 @@
           dataType: 'json',
           success: function (response) {
             if (response.success) {
-              form[0].reset();
+              //form[0].reset();
               // fetchCategories();
               // fetchProducts();
               alert('Review submitted successfully!');
-              //setTimeout(() => location.reload(), 100);
-              
-              window.location.href = 'submit_review.php'; // Redirect to view reviews page
+              const cleanUrl = window.location.origin + window.location.pathname;
+              window.history.replaceState(null, null, cleanUrl);
+              location.reload();
+              //window.location.href = 'submit_review.php'; // Redirect to view reviews page
             } else {
               alert('Failed to submit review.');
             }
