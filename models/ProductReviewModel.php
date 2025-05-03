@@ -20,15 +20,7 @@ class ProductReviewModel{
     public function add($user_id, $product_id, $rating, $review_text){
         $stmt = $this->conn->prepare("INSERT INTO product_review_comments (user_id, product_id, rating, review_text) VALUES (?,?,?,?)");
         $stmt->bind_param("iiis",$user_id, $product_id, $rating, $review_text);
-        //$this->conn->insert_id;
-        //if there are no existing review
-        if($this->getByIds($user_id, $product_id) == null){
-            //$SentimentModel = new Sentiment();
-            return ($stmt->execute() && $this->SentimentModel->add($this->conn->insert_id, $review_text));
-        }
-        else{
-            return false;
-        }
+        return ($stmt->execute() && $this->SentimentModel->add($this->conn->insert_id, $review_text));
     }
 
     //retrieve all product review

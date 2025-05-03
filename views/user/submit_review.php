@@ -41,11 +41,11 @@
       <div class="review-card">
         <h2>Review Form</h2>
         <p class="subhead">Write your Review</p>
-        <form action="#" method="POST">
+        <form id="submit-review_form">
           <!-- Category Dropdown -->
           <div class="mb-3">
             <label for="categoryDropdown" class="form-label">Category</label>
-            <select id="categoryDropdown" name="category" class="form-select" required>
+            <select id="categoryDropdown" name="category" class="form-select">
               <option value="" disabled selected>Select Category</option>
               <!-- Categories will be dynamically populated here -->
             </select>
@@ -65,7 +65,7 @@
           <div class="rating mb-3">
           <input type="radio" id="star5" name="rating" value="5"/><label for="star5">★</label>
             <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3"/><label for="star3">★</label>
+            <input type="radio" id="star3" name="rating" value="3" checked/><label for="star3">★</label>
             <input type="radio" id="star2" name="rating" value="2"/><label for="star2">★</label>
             <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
           </div>
@@ -111,7 +111,7 @@
               categoryDropdown.append('<option value="" selected>All Category</option>');
               response.forEach(function (category) {
                 var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase())
-                categoryDropdown.append(`<option value="${category.id}" data-category_id="${category.id}">${c_name}</option>`);
+                categoryDropdown.append(`<option value="${category.id}">${c_name}</option>`);
               
                 if (selectedCategoryID) {
                   categoryDropdown.val(selectedCategoryID);
@@ -145,7 +145,7 @@
 
                 if(!categoryID || product.category_id == categoryID){
                   var p_name = product.name.replace(/\b\w/g, char => char.toUpperCase())
-                  productDropdown.append(`<option value="${product.id}">${p_name}</option>`);
+                  productDropdown.append(`<option value="${product.id}" data-category_id="${product.category_id}" >${p_name}</option>`);
                
                 }
                 
@@ -164,6 +164,42 @@
       }
 
 
+      //Store data to database
+      $('#submit-review_form').on('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        const form = $(this);
+        const formData = form.serialize(); // Serialize the form data
+
+        $.ajax({
+          url: './../../controllers/submit_review_controller.php', // Adjust the path to your API
+          method: 'POST',
+          data: formData,
+          dataType: 'json',
+          success: function (response) {
+            if (response.success) {
+              form[0].reset();
+              // fetchCategories();
+              // fetchProducts();
+              alert('Review submitted successfully!');
+              //setTimeout(() => location.reload(), 100);
+              
+              window.location.href = 'submit_review.php'; // Redirect to view reviews page
+            } else {
+              alert('Failed to submit review.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while submitting the review.');
+          },
+        });
+      });
+
+
+
+
+
+
+
       fetchCategories( <?php echo json_encode($category_id); ?>);
       fetchProducts(<?php echo json_encode($category_id); ?>, <?php echo json_encode($product_id); ?>);
 
@@ -172,6 +208,11 @@
       $('#categoryDropdown').on('change', function () {
         const categoryID = $(this).val() ? $(this).val() : null;
         fetchProducts(categoryID);
+      });
+      
+      //select category from product automatically
+      $('#productDropdown').on('change', function () {
+        $('#categoryDropdown').val($(this).find(':selected').data('category_id'));
       });
     
       

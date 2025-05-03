@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ ."/../config.php";
-require_once __DIR__ ."/SentimentAnalyzerModel.php";
+require_once __DIR__ ."/SentimentAnalyzer.php";
 
 //ADD SENTIMENT, update when the text is updated, 
 //delete when review is deleted, retrieve (with positive, negative, neutral, or all)

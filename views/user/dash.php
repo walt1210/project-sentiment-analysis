@@ -196,12 +196,13 @@
                     } else {
                         cat_name = "Unknown";
                     }
+                    let prod_name = products.name.replace(/\b\w/g, char => char.toUpperCase());
                     append = `
                                  <div class="col-md-4">
                                     <div class="card">
                                     <img src="../../uploads/${products.image_url}" class="card-img-top" alt="${products.name}">
                                         <div class="card-body">
-                                            <h5 class="card-title">${products.name}</h5>
+                                            <h5 class="card-title">${prod_name}</h5>
                                             <p class="card-text">Category: ${cat_name}</p>
                                             <button class="btn btn-primary view-product" data-id="${products.id}" data-name="${products.name}">View Product Reviews</button>
                                         </div>
@@ -239,7 +240,8 @@
                         .join(" ");
 
                     $('#modalProductImage').attr('src', `../../uploads/${response.data.image_url}`);
-                    $('#modalProductName').text(response.data.name);
+                    var prod_name = response.data.name.replace(/\b\w/g, char => char.toUpperCase());
+                    $('#modalProductName').text(prod_name);
                     $('#modalProductCategory').text(`Category: ${category}`);
                     $('#likeCount').text(response.data.like_count);
                     $('#unlikeCount').text(response.data.dislike_count);
