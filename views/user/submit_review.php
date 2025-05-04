@@ -174,7 +174,7 @@
       $('#submit-review_form').on('submit', function (e) {
         e.preventDefault(); // Prevent the default form submission
         const form = $(this);
-        const formData = form.serialize(); // Serialize the form data
+        const formData = form.serialize()  + "&action=" + encodeURIComponent("add"); // Serialize the form data
 
         $.ajax({
           url: './../../controllers/submit_review_controller.php', // Adjust the path to your API

@@ -39,7 +39,7 @@ class SentimentModel{
         return $stmt->execute();
     }
 
-    public function update($product_review_id, $review_text) {
+    public function update($product_review_id, $review_text): bool {
         $analysis = SentimentAnalyzer::analyze($review_text);
         $positive_count= $analysis["positive_count"];
         $negative_count= $analysis["negative_count"];
@@ -65,7 +65,7 @@ class SentimentModel{
     //delete sentiment
     public function delete($product_review_id){
         $stmt = $this->conn->prepare("DELETE FROM sentiments WHERE product_review_id = ?");
-        $stmt->bind_param("s", $product_review_id); 
+        $stmt->bind_param("i", $product_review_id); 
         return $stmt->execute();
     }
 
