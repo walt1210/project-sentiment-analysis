@@ -1,5 +1,5 @@
 <?php
-  require_once __DIR__ . '/session.php';
+  // require_once __DIR__ . '/session.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +35,7 @@
   <main class="dashboard-page">
     <!-- 2) sentiment -->
     <h2>Sentiment Report</h2>
-    <section class="sentiment-reports">
+    <!-- <section class="sentiment-reports">
         <div class="sentiment-card">
         <h3>125</h3>
         <p>Total Reviews</p>
@@ -52,93 +52,142 @@
         <h3>15%</h3>
         <p>Neutral</p>
     </div>
-    </section>
+    </section> -->
 
-<!-- CHART -->
-<section class="chart-section my-4">
-    <canvas id="sentimentChart" height="100"></canvas>
+    <?php
+require_once __DIR__ . "/../../models/SentimentAnalyzer.php"; 
+
+$total_reviews = 125;
+$positive_percentage = 60;
+$negative_percentage = 25;
+$neutral_percentage = 15;
+?>
+
+<section class="sentiment-reports">
+    <div class="sentiment-card">
+        <h3><?php echo $total_reviews; ?></h3>
+        <p>Total Reviews</p>
+    </div>
+    <div class="sentiment-card">
+        <h3><?php echo $positive_percentage; ?>%</h3>
+        <p>Positive</p>
+    </div>
+    <div class="sentiment-card">
+        <h3><?php echo $negative_percentage; ?>%</h3>
+        <p>Negative</p>
+    </div>
+    <div class="sentiment-card">
+        <h3><?php echo $neutral_percentage; ?>%</h3>
+        <p>Neutral</p>
+    </div>
 </section>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-<canvas id="SentReviews" style="width:100%;max-width:600px"></canvas>
+<!-- CHART -->
+<?php 
+$chartData = [
+    [
+        'product' => 'Shoes',
+        'positive' => 60,
+        'negative' => 25,
+        'neutral' => 15
+    ],
+    [
+        'product' => 'Smartphone',
+        'positive' => 40,
+        'negative' => 35,
+        'neutral' => 25
+    ],
+    [
+        'product' => 'Pants',
+        'positive' => 80,
+        'negative' => 10,
+        'neutral' => 10
+    ]
+];
+?>
 
-<script>
-  const xValues = [100,200,300,400,500,600,700,800,900,1000];
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stacked Sentiment Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <section class="sentiment-chart">
+        <h2 style="text-align: center;">Product Sentiment Breakdown</h2>
+        <canvas id="sentimentChart" width="700" height="400"></canvas>
 
-new Chart("SentReviews", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-      borderColor: "red",
-      fill: false
-    },{
-      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-      borderColor: "green",
-      fill: false
-    },{
-      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-      borderColor: "blue",
-      fill: false
-    }]
-  },
-  options: {
-    legend: {display: false}
-  }
-});
-</script>
+        <script>
+            const labels = <?php echo json_encode(array_column($chartData, 'product')); ?>;
+            const positiveData = <?php echo json_encode(array_column($chartData, 'positive')); ?>;
+            const negativeData = <?php echo json_encode(array_column($chartData, 'negative')); ?>;
+            const neutralData = <?php echo json_encode(array_column($chartData, 'neutral')); ?>;
 
-<!-- 
-<script>
-fetch('analyze_reviews.php')
-    .then(response => response.json())
-    .then(data => {
-        const ctx = document.getElementById('sentimentChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Total Reviews', 'Positive', 'Negative', 'Neutral'],
-                datasets: [{
-                    label: 'Sentiment Results',
-                    data: [data.total, data.positive, data.negative, data.neutral],
-                    backgroundColor: [
-                        'rgba(0, 0, 0, 0.6)',  // Total - Black
-                        'rgba(75, 192, 192, 0.6)',  // Positive - Green
-                        'rgba(255, 99, 132, 0.6)',  // Negative - Red
-                        'rgba(0, 83, 248, 0.6)'  // Neutral - Blue
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(201, 203, 207, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Sentiment Analysis Overview'
-                    }
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                          {
+                              label: 'Positive',
+                              data: positiveData,
+                              backgroundColor: '#64b5f6', // light blue
+                              stack: 'sentiments'
+                          },
+                          {
+                              label: 'Negative',
+                              data: negativeData,
+                              backgroundColor: '#5c6bc0', // blue-gray
+                              stack: 'sentiments'
+                          },
+                          {
+                              label: 'Neutral',
+                              data: neutralData,
+                              backgroundColor: '#283593', // dark navy
+                              stack: 'sentiments'
+                          }
+                      ]
+
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Percentage'
+                            }
                         }
                     }
                 }
-            }
-        });
-    });
-</script> -->
+            });
+        </script>
+    </section>
+</body>
+</html>
+
+</section> 
+
+<form method="post" action="/project-sentiment-analysis/controllers/export_reviews.php">
+    <button type="submit" name="export" class="btn btn-primary">Export Reviews to CSV</button>
+</form>
+
 
 <!-- 3) Products Table -->
 <h2>Product List</h2>
@@ -273,7 +322,8 @@ fetch('analyze_reviews.php')
       // Fetch and populate reviews on page load
       function fetchReviews() {
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
+          // url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
+          url: '/project-sentiment-analysis/controllers/get_reviews_of_product.php', 
           method: 'GET',
           success: function (response) {
             if (response.success) {

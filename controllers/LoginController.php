@@ -24,9 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $LogModel->add($row['id'], 'login');
             if($row['role_id'] == 1){   //if standard user
                 header('Location: ../views/user/dashboard.php');
+                exit();
             }
             else{    //if admin
                 header('Location: ../views/admin/dashboard.php');
+                exit();
             }
             die();
         }

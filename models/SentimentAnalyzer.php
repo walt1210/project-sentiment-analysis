@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ ."/../config.php";
-class SentimentAnalyzer{
-    
+
+class SentimentAnalyzer{    
 
     public static $negative_words = [];
     public static $positive_words = [];
@@ -50,7 +50,6 @@ class SentimentAnalyzer{
         return $success_positive && $success_negative;
     }
 
-
     //gets words from text file and load to database (if database is empty)
     private static function getLexiconsFromFile(){
         $conn = Database::connect();
@@ -87,8 +86,6 @@ class SentimentAnalyzer{
             fclose($file_negative);
         }
     }
-
-
 
     public static function analyze($review_text){
         if(empty(self::$negative_words) || empty(self::$positive_words)){

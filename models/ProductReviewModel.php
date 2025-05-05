@@ -115,11 +115,14 @@ class ProductReviewModel{
         return ($stmt->execute() && $this->SentimentModel->delete($id));
     }
 
-
     //making csv file
     public function getCSV(){
         $data = $this->getAllWithSentiment();
         $csv_file = "sentiments_data.csv";
+
+        if (empty($data)) {
+            throw new Exception("No data to export.");
+        }
 
         $file = fopen($csv_file,"w");
 
@@ -131,6 +134,31 @@ class ProductReviewModel{
 
         fclose($file);
     }
+
+    // public function getCSV() {
+    //     $data = $this->getAllWithSentiment();
+    
+    //     if (empty($data)) {
+    //         throw new Exception("No data to export.");
+    //     }
+    
+    //     header('Content-Type: text/csv');
+    //     header('Content-Disposition: attachment; filename="sentiments_data.csv"');
+    //     header('Pragma: no-cache');
+    //     header('Expires: 0');
+    
+    //     $output = fopen('php://output', 'w');
+    
+    //     fputcsv($output, array_keys($data[0]));
+    
+    //     foreach ($data as $row) {
+    //         fputcsv($output, $row);
+    //     }
+    
+    //     fclose($output);
+    //     exit(); 
+    // }
+    
 
 }
 
