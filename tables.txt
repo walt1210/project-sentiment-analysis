@@ -83,12 +83,16 @@ INSERT INTO users (email, first_name, last_name, password_, role_id)
 
 INSERT INTO categories (name) VALUES ('sports');
 INSERT INTO categories (name) VALUES ('personal care');
+INSERT INTO categories (name) VALUES ('electronics');
 
 INSERT INTO products (name, category_id, price, description, image_url)
     VALUES ('baby powder', '2', '50' , '500g', 'sample_url');
 
 INSERT INTO products (name, category_id, price, description, image_url)
     VALUES ('basketball', '1', '1000' ,'high quality', 'sample_url');
+
+INSERT INTO products (name, category_id, price, description, image_url)
+    VALUES ('smarthphone', '3', '101' ,'high quality', 'sample_url');
 
 INSERT INTO product_review_comments (user_id, product_id, rating, review_text)
     VALUES ('1', '1', '5', 'has a good quality');
