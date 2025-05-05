@@ -17,57 +17,54 @@ class ProductReviewModel{
     }
 
     //create new product review
-    public function add($user_id, $product_id, $rating, $review_text){
+    public function add($user_id, $product_id, $rating, $review_text): bool{
+        // Sanitize review_text to prevent malicious content
+        $review_text = htmlspecialchars($review_text, ENT_QUOTES, 'UTF-8');
+
         $stmt = $this->conn->prepare("INSERT INTO product_review_comments (user_id, product_id, rating, review_text) VALUES (?,?,?,?)");
-        $stmt->bind_param("iiis",$user_id, $product_id, $rating, $review_text);
-        //$this->conn->insert_id;
-        //if there are no existing review
-        if($this->getByIds($user_id, $product_id) == null){
-            //$SentimentModel = new Sentiment();
-            return ($stmt->execute() && $this->SentimentModel->add($this->conn->insert_id, $review_text));
-        }
-        else{
-            return false;
-        }
+        $stmt->bind_param("iiis", $user_id, $product_id, $rating, $review_text);
+        return ($stmt->execute() && $this->SentimentModel->add($this->conn->insert_id, $review_text));
     }
 
     //retrieve all product review
     public function getAll(){
         $result =$this->conn->query("SELECT * FROM product_review_comments");
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     //get all products including sentiments (default have no filter)
     public function getAllWithSentiment($product_id = "", $sentiment_type = ""){
-       
-        //if filter by product
-        if ($product_id != "") $product_id =  "products.id = '$product_id'";
-        
-        //if filter by sentiment type
-        $filter_list = ["positive", "negative", "neutral"];
-        $sentiment_type = ($sentiment_type != "" && in_array(strtolower(trim($sentiment_type)), $filter_list) ) ? "sentiments.type = '$sentiment_type'" : "";
-        $filter = "";
-        //if has product and review filter
-        if($product_id != "" && $sentiment_type != ""){
-            $filter = "WHERE $product_id AND $sentiment_type";
-        }
-        //if filter has product, no review or if no product and has review
-        elseif($product_id != "" ^ $sentiment_type!=""){
-            $filter = "WHERE $product_id $sentiment_type";
-        }
 
+        $conditions = [];
+
+        // Validate and add product filter
+        if (!empty($product_id)) {
+            $conditions[] = "products.id = '" . addslashes($product_id) . "'";
+        }
+        
+        // Validate and add sentiment type filter
+        $filter_list = ["positive", "negative", "neutral"];
+        $sentiment_type = strtolower(trim($sentiment_type));
+        if (in_array($sentiment_type, $filter_list)) {
+            $conditions[] = "sentiments.type = '" . addslashes($sentiment_type) . "'";
+        }
+        
+        // Build the WHERE clause if there are conditions
+        $filter = !empty($conditions) ? "WHERE " . implode(" AND ", $conditions) : "";
+        
         $sql = "SELECT
-                products.name AS 'product_name',
-                categories.name AS 'category_name',
-                users.email,
-                product_review_comments.rating,
-                product_review_comments.review_text,
-                sentiments.percentage,
-                sentiments.type
+            products.name AS 'product_name',
+            categories.name AS 'category_name',
+            users.email,
+            product_review_comments.rating,
+            product_review_comments.review_text,
+            sentiments.percentage,
+            sentiments.type
+
             FROM product_review_comments
-            LEFT JOIN products ON product_review_comments.id = products.id
-            LEFT JOIN categories ON products.category_id = categories.id
             LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
+            LEFT JOIN products ON product_review_comments.product_id = products.id
+            LEFT JOIN categories ON products.category_id = categories.id
             LEFT JOIN users ON product_review_comments.user_id = users.id
             $filter
             ";
@@ -76,13 +73,45 @@ class ProductReviewModel{
     }
 
     //get product review row
-    public function getByIds($user_id, $product_id){
-        $stmt = $this->conn->prepare("SELECT * FROM product_review_comments WHERE user_id = ? AND product_id = ?");
-        $stmt->bind_param("ii", $user_id, $product_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    public function getByIds($product_id = "", $user_id = ""){
+        $conditions = [];
+        //if filter by user
+        if (!empty($user_id)) {
+            $conditions[] = "user_id = '" . addslashes($user_id) . "'";
+        }
+        if (!empty($product_id)) {
+            $conditions[] = "product_id = '" . addslashes($product_id) . "'";
+        }   
+        
+        $filter = !empty($conditions) ? "WHERE " . implode(" AND ", $conditions) : "";
+
+
+        $sql = "SELECT product_review_comments.*, 
+            products.name AS product_name, 
+            categories.name AS category_name, 
+            sentiments.type
+            FROM product_review_comments
+            LEFT JOIN products ON product_review_comments.product_id = products.id
+            LEFT JOIN categories ON products.category_id = categories.id
+            LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id $filter" ;
 
         //return $stmt->get_result()->fetch_assoc();
+        $result = $this->conn->query( $sql );
+        return $result->fetch_all(MYSQLI_ASSOC );
+      
+        
+    }
+
+    public function getOneByID($id){
+        $sql = "SELECT product_review_comments.*, products.name AS 'product_name'
+                FROM product_review_comments
+                LEFT JOIN products ON product_review_comments.product_id = products.id
+                WHERE product_review_comments.id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if($result->num_rows == 1){
             return $result->fetch_assoc();
         }
@@ -93,26 +122,29 @@ class ProductReviewModel{
     }
 
     //update product review
-    public function update($id, $user_id, $product_id, $rating, $review_text){
-        $stmt = $this->conn->prepare("UPDATE product_review_comments SET rating=?, review_text=? WHERE user_id=? AND product_id=? AND id=?");
-        $stmt->bind_param("isiii", $rating, $review_text, $user_id, $product_id, $id);
-        $success = $stmt->execute();
-        if($success && ($stmt->affected_rows==1)){
-            //$SentimentModel = new Sentiment();
-            return $success && $this->SentimentModel->update($id, $review_text);;
+    public function update($id, $rating, $review_text){
+        $success = false;
+
+        $stmt = $this->conn->prepare("UPDATE product_review_comments SET rating=?, review_text=? WHERE id=?");
+        $stmt->bind_param("isi", $rating, $review_text, $id);
+        $success_upd = $stmt->execute();
+
+        $is_row_updated = $success_upd && ($stmt->affected_rows == 1);
+
+        if ($is_row_updated) {
+            $sentiment_updated = $this->SentimentModel->update($id, $review_text);
+            $success = $sentiment_updated;
         }
-        else{
-            return false;
-        }
+        return $success;
     }
 
     //delete product review
     public function delete($id){
         $stmt = $this->conn->prepare("DELETE FROM product_review_comments WHERE id = ?");
-        $stmt->bind_param("s", $id); 
+        $stmt->bind_param("i", $id); 
         //$success = $stmt->execute();
         //$SentimentModel = new Sentiment(); 
-        return ($stmt->execute() && $this->SentimentModel->delete($id));
+        return ($this->SentimentModel->delete($id) && $stmt->execute());
     }
 
     //making csv file

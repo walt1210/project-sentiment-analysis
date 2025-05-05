@@ -1,5 +1,9 @@
 <?php
   require_once __DIR__ . '/session.php';
+
+  $category_id = isset($_GET['category']) ? $_GET['category'] : null;
+  $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,11 +41,11 @@
       <div class="review-card">
         <h2>Review Form</h2>
         <p class="subhead">Write your Review</p>
-        <form action="#" method="POST">
+        <form id="submit-review_form">
           <!-- Category Dropdown -->
           <div class="mb-3">
             <label for="categoryDropdown" class="form-label">Category</label>
-            <select id="categoryDropdown" name="category" class="form-select" required>
+            <select id="categoryDropdown" name="category" class="form-select">
               <option value="" disabled selected>Select Category</option>
               <!-- Categories will be dynamically populated here -->
             </select>
@@ -61,7 +65,7 @@
           <div class="rating mb-3">
           <input type="radio" id="star5" name="rating" value="5"/><label for="star5">★</label>
             <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
-            <input type="radio" id="star3" name="rating" value="3"/><label for="star3">★</label>
+            <input type="radio" id="star3" name="rating" value="3" checked/><label for="star3">★</label>
             <input type="radio" id="star2" name="rating" value="2"/><label for="star2">★</label>
             <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
           </div>
@@ -93,19 +97,32 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        location.reload(); // Reloads page and re-triggers PHP
+      }
+    });
+
     $(document).ready(function () {
       // Fetch categories from the backend
-      function fetchCategories() {
+      function fetchCategories(selectedCategoryID = null) {
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_categories.php', // Adjust the path to your API
+          url: './../../controllers/get_categories.php', // Adjust the path to your API
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
-            if (response.success) {
+            if (response.length > 0) {
               const categoryDropdown = $('#categoryDropdown');
               categoryDropdown.empty();
-              categoryDropdown.append('<option value="" disabled selected>Select Category</option>');
-              response.categories.forEach(function (category) {
-                categoryDropdown.append(`<option value="${category.id}">${category.name}</option>`);
+              categoryDropdown.append('<option value="" selected>All Category</option>');
+              response.forEach(function (category) {
+                var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase())
+                categoryDropdown.append(`<option value="${category.id}">${c_name}</option>`);
+              
+                if (selectedCategoryID) {
+                  categoryDropdown.val(selectedCategoryID);
+                }
+              
               });
             } else {
               alert('Failed to fetch categories.');
@@ -117,21 +134,31 @@
         });
       }
 
-      // Fetch products based on the selected category
-      $('#categoryDropdown').on('change', function () {
-        const categoryId = $(this).val();
+
+      function fetchProducts(categoryID = null, productID=null) {
+        
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_products.php', // Adjust the path to your API
+          url: './../../controllers/get_products.php', // Adjust the path to your API
           method: 'GET',
-          data: { category_id: categoryId },
+          dataType: 'json',
           success: function (response) {
             if (response.success) {
               const productDropdown = $('#productDropdown');
               productDropdown.empty();
               productDropdown.append('<option value="" disabled selected>Select Product</option>');
-              response.products.forEach(function (product) {
-                productDropdown.append(`<option value="${product.id}">${product.name}</option>`);
+              response.data.forEach(function (product) {
+                console.log(product.category_id, categoryID) ;
+
+                if(!categoryID || product.category_id == categoryID){
+                  var p_name = product.name.replace(/\b\w/g, char => char.toUpperCase())
+                  productDropdown.append(`<option value="${product.id}" data-category_id="${product.category_id}" >${p_name}</option>`);
+               
+                }
+                
               });
+              if (productID) {
+                productDropdown.val(productID);
+              }
             } else {
               alert('Failed to fetch products.');
             }
@@ -140,11 +167,64 @@
             alert('An error occurred while fetching products.');
           },
         });
+      }
+
+
+      //Store data to database
+      $('#submit-review_form').on('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        const form = $(this);
+        const formData = form.serialize()  + "&action=" + encodeURIComponent("add"); // Serialize the form data
+
+        $.ajax({
+          url: './../../controllers/submit_review_controller.php', // Adjust the path to your API
+          method: 'POST',
+          data: formData,
+          dataType: 'json',
+          success: function (response) {
+            if (response.success) {
+              //form[0].reset();
+              // fetchCategories();
+              // fetchProducts();
+              alert('Review submitted successfully!');
+              const cleanUrl = window.location.origin + window.location.pathname;
+              window.history.replaceState(null, null, cleanUrl);
+              location.reload();
+              //window.location.href = 'submit_review.php'; // Redirect to view reviews page
+            } else {
+              alert('Failed to submit review.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while submitting the review.');
+          },
+        });
       });
 
-      // Initialize categories on page load
-      fetchCategories();
+
+
+
+
+
+
+      fetchCategories( <?php echo json_encode($category_id); ?>);
+      fetchProducts(<?php echo json_encode($category_id); ?>, <?php echo json_encode($product_id); ?>);
+
+
+      // Fetch products based on the selected category
+      $('#categoryDropdown').on('change', function () {
+        const categoryID = $(this).val() ? $(this).val() : null;
+        fetchProducts(categoryID);
+      });
+      
+      //select category from product automatically
+      $('#productDropdown').on('change', function () {
+        $('#categoryDropdown').val($(this).find(':selected').data('category_id'));
+      });
+    
+      
     });
+    
   </script>
 </body>
 </html>

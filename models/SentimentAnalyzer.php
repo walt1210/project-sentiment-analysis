@@ -103,14 +103,19 @@ class SentimentAnalyzer{
         $review_text = strtolower($review_text);
         $txt_to_analyze = explode(' ', $review_text);
 
-        foreach($txt_to_analyze as $word){
-            if(in_array($word, self::$positive_words)){
-                $positive_count++;
-            }
-            if(in_array($word, self::$negative_words)){
-                $negative_count++;
-            }
-        }
+        // foreach($txt_to_analyze as $word){
+        //     if(in_array($word, self::$positive_words)){
+        //         $positive_count++;
+        //     }
+        //     if(in_array($word, self::$negative_words)){
+        //         $negative_count++;
+        //     }
+        // }
+
+
+        $positive_count = count(array_intersect($txt_to_analyze, self::$positive_words));
+        $negative_count = count(array_intersect($txt_to_analyze, self::$negative_words));
+
         return ["positive_count" => $positive_count,"negative_count"=> $negative_count];
 
     }

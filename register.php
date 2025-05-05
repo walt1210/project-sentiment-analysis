@@ -49,6 +49,12 @@
 
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        location.reload(); // Reloads page and re-triggers PHP
+      }
+    });
+
     // AJAX for Registration
     $('#registerForm').on('submit', function(e) {
       e.preventDefault();

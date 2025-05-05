@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ ."/../config.php";
+<<<<<<< HEAD
 // require_once __DIR__ ."/SentimentAnalyzerModel.php";
+=======
+require_once __DIR__ ."/SentimentAnalyzer.php";
+>>>>>>> 8ffb93022c30122e97e7d81e2924f8959e84ea80
 
 //ADD SENTIMENT, update when the text is updated, 
 //delete when review is deleted, retrieve (with positive, negative, neutral, or all)
@@ -39,7 +43,7 @@ class SentimentModel{
         return $stmt->execute();
     }
 
-    public function update($product_review_id, $review_text) {
+    public function update($product_review_id, $review_text): bool {
         $analysis = SentimentAnalyzer::analyze($review_text);
         $positive_count= $analysis["positive_count"];
         $negative_count= $analysis["negative_count"];
@@ -65,7 +69,7 @@ class SentimentModel{
     //delete sentiment
     public function delete($product_review_id){
         $stmt = $this->conn->prepare("DELETE FROM sentiments WHERE product_review_id = ?");
-        $stmt->bind_param("s", $product_review_id); 
+        $stmt->bind_param("i", $product_review_id); 
         return $stmt->execute();
     }
 

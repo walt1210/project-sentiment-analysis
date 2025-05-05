@@ -38,6 +38,7 @@
         <thead>
           <tr>
             <th>Product</th>
+            <th>Category</th>
             <th>Review</th>
             <th>Rating</th>
             <th>Sentiment</th>
@@ -46,36 +47,6 @@
         </thead>
         <tbody>
           <!-- Sample Reviews -->
-          <tr>
-            <td>Superstar II Shoes</td>
-            <td>Great product! Very comfortable.</td>
-            <td>⭐⭐⭐⭐</td>
-            <td>Positive</td>
-            <td>
-              <button class="btn btn-sm btn-warning edit-review" data-id="1">Edit</button>
-              <button class="btn btn-sm btn-danger delete-review" data-id="1">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Smartphone X</td>
-            <td>Good performance but battery life could be better.</td>
-            <td>⭐⭐⭐</td>
-            <td>Neutral</td>
-            <td>
-              <button class="btn btn-sm btn-warning edit-review" data-id="2">Edit</button>
-              <button class="btn btn-sm btn-danger delete-review" data-id="2">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Ultra Stretch Pants</td>
-            <td>Perfect fit and very durable.</td>
-            <td>⭐⭐⭐⭐⭐</td>
-            <td>Positive</td>
-            <td>
-              <button class="btn btn-sm btn-warning edit-review" data-id="3">Edit</button>
-              <button class="btn btn-sm btn-danger delete-review" data-id="3">Delete</button>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -134,9 +105,56 @@
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        location.reload(); // Reloads page and re-triggers PHP
+      }
+    });
+
+
+
+    
     $(document).ready(function() {
       // Initialize DataTable
       $('#reviewsTable').DataTable({
+        processing: true,
+        serverSide: false,
+        ajax: {
+          url: './../../controllers/get_prod_revs_user.php', // Adjust the path to your API
+          type: 'GET',
+          dataSrc: function(json) {
+            if(json.success){
+              return json.data; // Return the data array from the response
+            } else {
+              alert('No reviews found.');
+              return []; // Return an empty array if no reviews found
+            }
+         }
+        },
+        columns: [
+          { data: 'product_name', render: function(data) {
+              return data.replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
+            }
+          },
+          { data: 'category_name', render: function(data) {
+              return data.replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
+            }
+          },
+          { data: 'review_text' },
+          { data: 'rating', render: function(data) {
+              return '⭐'.repeat(data); // Render stars based on rating
+            }
+          },
+          { data: 'type', render: function(data) {
+              return data.charAt(0).toUpperCase() + data.slice(1); // Capitalize first letter of sentiment type
+            }
+          },
+          { data: 'id', render: function(data) {
+              return `<button class="btn btn-sm btn-warning edit-review" data-id="${data}">Edit</button>
+                      <button class="btn btn-sm btn-danger delete-review" data-id="${data}">Delete</button>`;
+            }
+          }
+        ],
         paging: true,
         searching: true,
         ordering: true,
@@ -144,41 +162,24 @@
         pageLength: 5 // Display 5 reviews per page
       });
 
-      // Handle delete review
-      $('.delete-review').on('click', function() {
-        const reviewId = $(this).data('id');
-        if (confirm('Are you sure you want to delete this review?')) {
-          alert('Review with ID ' + reviewId + ' deleted (sample action).');
-          // Backend integration: Replace this alert with an AJAX call to delete the review
-        }
-      });
 
-      // Handle edit review
-      $('.edit-review').on('click', function() {
-        const reviewId = $(this).data('id');
-        alert('Edit review with ID ' + reviewId + ' (sample action).');
-        // Backend integration: Redirect to an edit review page or open a modal for editing
-      });
-    });
-  </script>
-  <script>
-    $(document).ready(function () {
-      // Handle Edit Review Button Click
-      $('.edit-review').on('click', function () {
-        const reviewId = $(this).data('id');
 
+      $('#reviewsTable tbody').on('click', '.edit-review', function() {
+        let dataId = $(this).attr('data-id');
+        //alert("Button clicked for ID: " + dataId);
         // Fetch review details via AJAX
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_review.php', // Adjust the path to your API
+          url: './../../controllers/get_one_prod_rev.php', // Adjust the path to your API
           method: 'GET',
-          data: { id: reviewId },
+          data: { id: dataId },
+          dataType: 'json',
           success: function (response) {
             if (response.success) {
               // Populate the modal with review data
               $('#reviewId').val(response.review.id);
-              $('#productName').val(response.review.product_name);
+              $('#productName').val(response.review.product_name.replace(/\b\w/g, char => char.toUpperCase()));
               $(`input[name="rating"][value="${response.review.rating}"]`).prop('checked', true);
-              $('#reviewText').val(response.review.comment);
+              $('#reviewText').val(response.review.review_text);
 
               // Show the modal
               $('#editReviewModal').modal('show');
@@ -192,20 +193,25 @@
         });
       });
 
-      // Handle Edit Review Form Submission
-      $('#editReviewForm').on('submit', function (e) {
+
+
+
+
+
+       // Handle Edit Review Form Submission
+       $('#editReviewForm').on('submit', function (e) {
         e.preventDefault();
 
-        const formData = $(this).serialize();
-
+        const formData = $(this).serialize()  + "&action=" + encodeURIComponent("edit"); // Serialize the form data
         // Submit the edited review via AJAX
         $.ajax({
-          url: '/project-sentiment-analysis/api/edit_review.php', // Adjust the path to your API
+          url: './../../controllers/submit_review_controller.php', // Adjust the path to your API
           method: 'POST',
           data: formData,
+          dataType: 'json',
           success: function (response) {
-            if (response.success) {
-              alert('Review updated successfully.');
+            if(response.success) {
+              alert(response.msg);
               $('#editReviewModal').modal('hide');
               location.reload(); // Reload the page to reflect changes
             } else {
@@ -217,7 +223,39 @@
           },
         });
       });
-    });
+
+
+
+      //delete review
+      $('#reviewsTable tbody').on('click', '.delete-review', function() {
+        let dataId = $(this).attr('data-id');
+        //alert("Button clicked for ID: " + dataId);
+
+
+        if(confirm('Are you sure you want to delete?')){
+          $.ajax({
+          url: './../../controllers/submit_review_controller.php', // Adjust the path to your API
+          method: 'POST',
+          data:   { action:"delete", review_id: dataId },
+          dataType: 'json',
+          success: function (response) {
+            if(response.success) {
+              alert(response.msg);
+              $('#editReviewModal').modal('hide');
+              location.reload(); // Reload the page to reflect changes
+            } else {
+              alert('Failed to delete review.');
+            }
+          },
+          error: function () {
+            alert('An error occurred while deleting the review.');
+          },
+        });
+        }
+        
+      });
+
+ });
   </script>
 </body>
 </html>
