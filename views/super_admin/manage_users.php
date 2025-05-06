@@ -13,7 +13,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="superAdmin_dashboard.php">
+        <a class="navbar-brand" href="dashboard.php">
             <img src="../../assets/logo-icon-light.png" alt="Sentimo icon" height="50">
             <img src="../../assets/logo-text-light.png" alt="Sentimo text" height="50">
         </a>
@@ -26,7 +26,7 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="superAdmin_add_products.php">Add Product</a></li>
+            <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
             <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
             <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
@@ -113,6 +113,11 @@
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // Reloads page and re-triggers PHP
+    }
+  });
     $(document).ready(function() {
       // Initialize DataTable
       $('#usersTable').DataTable({

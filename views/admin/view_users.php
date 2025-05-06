@@ -92,6 +92,11 @@
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
   <script>
+    window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // Reloads page and re-triggers PHP
+    }
+  });
     $(document).ready(function() {
       // Initialize DataTable
       $('#usersTable').DataTable({

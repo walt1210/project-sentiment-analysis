@@ -1,5 +1,5 @@
 <?php
-  // require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/session.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -298,6 +298,11 @@ $chartData = [
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <script>
+    window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // Reloads page and re-triggers PHP
+    }
+  });
     $(document).ready(function () {
       // Initialize DataTables for Product List Table
       $('#productTable').DataTable({
