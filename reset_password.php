@@ -28,7 +28,8 @@
         <h2>Reset Password</h2>
         <p class="subhead">Set a new password</p>
         <form id="reset-form">
-            <input type="password" name="new_password" placeholder="Enter new password" required>
+            <input type="password" name="new_password" placeholder="Enter new password" minlength="8" required>
+            <input type="password" name="new_password_cnfrm" placeholder="Confirm new password" minlength="8" required>
             <button type="submit">Reset Password</button>
         </form>
     </aside>
@@ -51,10 +52,17 @@
   }
 
   $('#reset-form').on('submit', function(e) {
+    
     e.preventDefault();
+
+    if ($('input[name=new_password]').val() !== $('input[name=new_password_cnfrm]').val()) {
+      $('#reset-response').html('<p>Passwords do not match.</p>');
+      return;
+    }
+
     $('#reset-response').html('Processing...');
-    console.log($('input[name=new_password]').val());
-    console.log(token);
+    // console.log($('input[name=new_password]').val());
+    // console.log(token);
 
     $.ajax({
       url: './controllers/forgot_password/reset_password_controller.php',

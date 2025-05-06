@@ -42,7 +42,7 @@
     // AJAX for Reset Password
     $('#forgot_password_form').on('submit', function(e) {
         e.preventDefault();
-        alert($(this).serialize());
+        // alert($(this).serialize());
         $.ajax({
             type: 'POST',
             method: 'POST',
@@ -50,7 +50,7 @@
             dataType: 'json',
             data: $(this).serialize(),
             success: function(response) {
-               alert($(this).serialize());
+              //  alert($(this).serialize());
                 alert(response.message); // Handle success response
                 window.location.href = "login.php"; // Redirect to login page
             },
