@@ -61,7 +61,7 @@ if ($stmt->fetch()) {
     //If token already sent and is not expired
     if ($stmt->fetch()) {
         $stmt->close();
-        $resetLink = "http://localhost/project-sentiment-analysis/reset_password.php?token=$existing_token";
+        // $resetLink = "http://localhost/project-sentiment-analysis/reset_password.php?token=$existing_token";
         //sendResetEmail($email, $resetLink);
         echo json_encode(['status' => 'info', 'message' => 'Reset link already sent. Check your email.']);
         exit;
