@@ -224,10 +224,11 @@
 
                     const lk = ['like', 'dislike'];
 
-                    if (lk.includes(response.data.user_vote)) {
+                    // if (lk.includes(response.data.user_vote)) {
                       //console.log('Yes, banana is in the list!');
                       updateUI(response.data.user_vote);
-                    }
+                      console.log("vote" + response.data.user_vote);
+                    // }
 
 
                     return true;
@@ -298,9 +299,13 @@
             if (status === 'like') {
               $('#likeButton').css('background-color', '#388E3C');
                 $('#unlikeButton').css('background-color', '#FFAB91');
-            } else {
+            } else if(status =="dislike") {
               $('#unlikeButton').css('background-color', '#F44336');
                 $('#likeButton').css('background-color', '#81C784');
+            }
+            else {
+                $('#likeButton').css('background-color', '#81C784');
+                $('#unlikeButton').css('background-color', '#FFAB91');
             }
         }
 
@@ -326,20 +331,19 @@
         //function for every click of like or dislike button 
 
           $('.reaction-btn').on('click', function() {
-              if ($(this).attr('id') == 'likeButton') {
-                $(this).data('product-id');
-                updateProductVote('like', $(this).data('product-id'));
-                updateUI('like');
-                //console.log('Like button clicked!');
-                // Perform like logic here
-              } else if ($(this).attr('id') == 'unlikeButton') {
-
-                updateProductVote('dislike', $(this).data('product-id'));
-                updateUI('unlike');
-                //console.log('Unlike button clicked!');
-                // Perform unlike logic here
-              }
-              
+            //if like button is clicked, update the product vote to like
+            // and update the UI accordingly
+            if ($(this).attr('id') == 'likeButton') {
+              $(this).data('product-id');
+              updateProductVote('like', $(this).data('product-id'));
+              updateUI('like');
+            } 
+            //If unlike button is clicked, update the product vote to dislike
+            // and update the UI accordingly
+            else if ($(this).attr('id') == 'unlikeButton') {
+              updateProductVote('dislike', $(this).data('product-id'));
+              updateUI('dislike');
+            }
           });
 
 
