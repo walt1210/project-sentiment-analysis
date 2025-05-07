@@ -5,10 +5,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — Admin Dashboard</title>
+  <title>Sentimo — Manage Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
@@ -27,166 +26,73 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
-            <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard.php">Manage Users</a></li>
             <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
       </div>
   </nav>
 
-    <!-- 1) hero GIF -->
+  <main class="manageUsers-page">
+
+    <!-- 1) Full‑bleed hero GIF -->
     <section class="hero">
-      <img src="../../assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard hero" class="img-fluid">
+      <img src="/project-sentiment-analysis/assets/manage-users.gif" alt="Sentimo Manage Users overview">
     </section>
 
-  <main class="dashboard-page">
+    <!-- 2) Page heading -->
+    <h2 class="mt-5">Manage Users</h2>
 
-    <!-- 2) sentiment -->
-    <h2>Sentiment Report</h2>
-    <section class="sentiment-reports">
-        <div class="sentiment-card">
-        <h3>125</h3>
-        <p>Total Reviews</p>
-    </div>
-    <div class="sentiment-card">
-        <h3>60%</h3>
-        <p>Positive</p>
-    </div>
-    <div class="sentiment-card">
-        <h3>25%</h3>
-        <p>Negative</p>
-    </div>
-    <div class="sentiment-card">
-        <h3>15%</h3>
-        <p>Neutral</p>
-    </div>
-    </section>
-
-    <!-- CHART -->
-<section class="chart-section my-4">
-    <canvas id="sentimentChart" height="100"></canvas>
-</section>
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-<canvas id="SentReviews" style="width:100%;max-width:600px"></canvas>
-
-<script>
-  const xValues = [100,200,300,400,500,600,700,800,900,1000];
-
-new Chart("SentReviews", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [{
-      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-      borderColor: "red",
-      fill: false
-    },{
-      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-      borderColor: "green",
-      fill: false
-    },{
-      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-      borderColor: "blue",
-      fill: false
-    }]
-  },
-  options: {
-    legend: {display: false}
-  }
-});
-</script>
-
-<!-- 
-<script>
-fetch('analyze_reviews.php')
-    .then(response => response.json())
-    .then(data => {
-        const ctx = document.getElementById('sentimentChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Total Reviews', 'Positive', 'Negative', 'Neutral'],
-                datasets: [{
-                    label: 'Sentiment Results',
-                    data: [data.total, data.positive, data.negative, data.neutral],
-                    backgroundColor: [
-                        'rgba(0, 0, 0, 0.6)',  // Total - Black
-                        'rgba(75, 192, 192, 0.6)',  // Positive - Green
-                        'rgba(255, 99, 132, 0.6)',  // Negative - Red
-                        'rgba(0, 83, 248, 0.6)'  // Neutral - Blue
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(201, 203, 207, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Sentiment Analysis Overview'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
-    });
-</script> -->
-  
-    <!-- 3) Products Table -->
-    <h2>Product List</h2>
-    <section class="product-table" style="width: 100%; overflow-x: auto;">
-      <table id="productTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
+    <!-- 3) Responsive users table -->
+    <div class="table-wrapper">
+      <table id="usersTable" class="table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
-            <th style="width: 100px;">ID</th>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th style="width: 275px;">Actions</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Last Login</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
+          <!-- Sample Users -->
           <tr>
-            <td>1</td>
-            <td>Superstar II Shoes</td>
-            <td>Fashion</td>
-            <td>₱5,500</td>
+            <td>001</td>
+            <td>Taylor Swift</td>
+            <td>taylor.swift@gmail.com</td>
+            <td>1</td> <!-- Role ID: 2 (User) -->
+            <td>2025-04-17 12:34:56</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
-              <button class="btn btn-danger btn-sm">Delete</button>
-              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
+              <button class="btn btn-sm btn-primary make-admin" data-id="001">Make Admin</button>
+              <button class="btn btn-sm btn-danger deactivate" data-id="001">Deactivate</button>
             </td>
           </tr>
           <tr>
-            <td>2</td>
-            <td>Smartphone X</td>
-            <td>Electronics</td>
-            <td>₱25,000</td>
+            <td>002</td>
+            <td>Kali Uchis</td>
+            <td>kali.uchis@gmail.com</td>
+            <td>2</td> <!-- Role ID: 2 (User) -->
+            <td>2025-04-16 10:20:30</td>
             <td>
-              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
-              <button class="btn btn-danger btn-sm">Delete</button>
-              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
+              <button class="btn btn-sm btn-primary make-admin" data-id="002">Make Admin</button>
+              <button class="btn btn-sm btn-danger deactivate" data-id="002">Deactivate</button>
+            </td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>Sabrina Carpenter</td>
+            <td>sabrina.carpenter@gmail.com</td>
+            <td>1</td> <!-- Role ID: 1 (Admin) -->
+            <td>2025-04-15 15:45:10</td>
+            <td>
+              <button class="btn btn-sm btn-primary make-admin" data-id="003" disabled>Make Admin</button>
+              <button class="btn btn-sm btn-danger deactivate" data-id="003">Deactivate</button>
             </td>
           </tr>
         </tbody>
       </table>
-    </section>
+    </div>
 
   </main>
 
@@ -205,7 +111,6 @@ fetch('analyze_reviews.php')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
-
   <script>
     window.addEventListener('pageshow', function (event) {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -213,14 +118,86 @@ fetch('analyze_reviews.php')
     }
   });
     $(document).ready(function() {
-      $('#productTable').DataTable({
+
+
+      let table = $('#usersTable').DataTable({
+        processing: true,
+        serverSide: false,
+        ajax:  {
+          url: './../../controllers/UserController.php', // Adjust the path to your API
+          type: 'GET',
+          dataType: 'json',
+          dataSrc: function(response) {
+            if(response.data.length > 0){
+              return response.data; // Return the data array from the response
+            } else {
+              alert('No accounts found.');
+              return []; // Return an empty array if no reviews found
+            }
+         }
+        },
+        columns: [
+          { data: 'id' },
+          {
+              data: null,
+              render: function(data, type, row) {
+                  return row.first_name + ' ' + row.last_name;
+              }
+          },
+          { data: 'email' },
+          { data: 'role_name', render: function(data) {
+            return data.replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
+            } 
+          },
+          { data: 'latest_login'},
+          { data: null, render: function(data, type, row) {
+              if(row.role_id == 3){
+                return `<button class="btn btn-sm btn-primary make-admin" data-user_id="${data.id}" disabled>Make Admin</button>
+                        <button class="btn btn-sm btn-danger demote-admin" data-user_id="${data.id}"  disabled>Demote Admin</button>`;
+              }
+              const isAdmin = row.role_id == 2;
+              
+              // Render buttons for each row
+              return `<button class="btn btn-sm btn-primary make-admin" data-user_id="${data.id}" ${isAdmin ? 'disabled' : ''}>Make Admin</button>
+                      <button class="btn btn-sm btn-danger demote-admin" data-user_id="${data.id}"  ${isAdmin ? '' : 'disabled'}>Demote Admin</button>`;
+            }
+          }
+        ],
         paging: true,
         searching: true,
         ordering: true,
         lengthChange: true,
-        pageLength: 10,
-        autoWidth: false
-      });
+        pageLength: 10
+    });
+
+
+    $('#usersTable').on('click', '.make-admin', function() {
+        const userId = $(this).data('user_id');
+        updateRole(userId, 'admin');
+    });
+
+    $('#usersTable').on('click', '.demote-admin', function() {
+        const userId = $(this).data('user_id');
+        updateRole(userId, 'user');
+    });
+
+    function updateRole(userId, newRole) {
+        $.ajax({
+            url: './../../controllers/update_role.php',
+            method: 'POST',
+            dataType: 'json',
+            data: { id: userId, role: newRole },
+            success: function(response) {
+                alert("Role updated successfully.");
+                table.ajax.reload(null, false);
+            },
+            error: function() {
+                alert('Failed to update role.');
+            }
+        });
+    }
+
+      
     });
   </script>
 </body>
