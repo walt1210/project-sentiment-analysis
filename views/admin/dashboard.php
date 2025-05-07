@@ -117,11 +117,11 @@ $chartData = [
         <h2 style="text-align: center;">Product Sentiment Breakdown</h2>
         <canvas id="sentimentChart" width="700" height="400"></canvas>
 
-        <script>
-            const labels = <?php echo json_encode(array_column($chartData, 'product')); ?>;
-            const positiveData = <?php echo json_encode(array_column($chartData, 'positive')); ?>;
-            const negativeData = <?php echo json_encode(array_column($chartData, 'negative')); ?>;
-            const neutralData = <?php echo json_encode(array_column($chartData, 'neutral')); ?>;
+        <!-- <script>
+            const labels = <?php //echo json_encode(array_column($chartData, 'product')); ?>;
+            const positiveData = <?php //echo json_encode(array_column($chartData, 'positive')); ?>;
+            const negativeData = <?php //echo json_encode(array_column($chartData, 'negative')); ?>;
+            const neutralData = <?php //echo json_encode(array_column($chartData, 'neutral')); ?>;
 
             const ctx = document.getElementById('sentimentChart').getContext('2d');
             new Chart(ctx, {
@@ -177,7 +177,7 @@ $chartData = [
                     }
                 }
             });
-        </script>
+        </script> -->
     </section>
 </body>
 </html>
@@ -330,6 +330,7 @@ $chartData = [
           // url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
           url: '/project-sentiment-analysis/controllers/get_reviews_of_product.php', 
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
             if (response.success) {
               const reviewsTable = $('#reviewsTable').DataTable();
@@ -381,6 +382,81 @@ $chartData = [
           });
         }
       });
+
+
+
+
+
+      $.ajax({
+        url: './../../controllers/get_product_with_total_sentiment.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+          let labels = [];
+          let positive = [];
+          let neutral = [];
+          let negative = [];
+
+          response.data.forEach(function (item) {
+            labels.push(item.product);
+            positive.push(parseInt(item.positive));
+            neutral.push(parseInt(item.neutral));
+            negative.push(parseInt(item.negative));
+          });
+
+          const ctx = document.getElementById('sentimentChart').getContext('2d');
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Positive',
+                  data: positive,
+                  backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                },
+                {
+                  label: 'Neutral',
+                  data: neutral,
+                  backgroundColor: 'rgba(201, 203, 207, 0.7)'
+                },
+                {
+                  label: 'Negative',
+                  data: negative,
+                  backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Sentiment Breakdown by Product'
+                }
+              },
+              scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true }
+              }
+            }
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error('AJAX Error: ' + status + error);
+        }
+      });
+
+
+
+
+
+
+
+
+
+
     });
   </script>
 </body>

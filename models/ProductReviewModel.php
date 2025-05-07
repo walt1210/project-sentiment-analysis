@@ -167,29 +167,20 @@ class ProductReviewModel{
         fclose($file);
     }
 
-    // public function getCSV() {
-    //     $data = $this->getAllWithSentiment();
-    
-    //     if (empty($data)) {
-    //         throw new Exception("No data to export.");
-    //     }
-    
-    //     header('Content-Type: text/csv');
-    //     header('Content-Disposition: attachment; filename="sentiments_data.csv"');
-    //     header('Pragma: no-cache');
-    //     header('Expires: 0');
-    
-    //     $output = fopen('php://output', 'w');
-    
-    //     fputcsv($output, array_keys($data[0]));
-    
-    //     foreach ($data as $row) {
-    //         fputcsv($output, $row);
-    //     }
-    
-    //     fclose($output);
-    //     exit(); 
-    // }
+    public function getProductsWithTotalSentiment(){
+        $sql = "SELECT 
+        products.name AS product,
+        SUM(sentiments.type = 'positive') AS positive,
+        SUM(sentiments.type = 'neutral') AS neutral,
+        SUM(sentiments.type = 'negative') AS negative
+      FROM product_review_comments
+      LEFT JOIN products ON product_review_comments.product_id = products.id
+      LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
+      GROUP BY products.id";
+        $result =$this->conn->query( $sql );
+        return $result->fetch_all(MYSQLI_ASSOC );
+
+    }
     
 
 }

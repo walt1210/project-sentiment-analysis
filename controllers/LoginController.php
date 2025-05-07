@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ../views/user/dashboard.php');
                 exit();
             }
-            elseif($row['role_id' == 2]){    //if admin
+            elseif($row['role_id'] == 2){    //if admin
                 header('Location: ../views/admin/dashboard.php');
                 exit();
             }
