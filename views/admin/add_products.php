@@ -46,6 +46,7 @@
               <option value="others">Others</option>
             </select>
           </div>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"  name="product_description" placeholder="Product Description" required></textarea>
           <label for="image-upload" class="upload-box">
             <img src="/project-sentiment-analysis/assets/upload-image-icon.png" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
@@ -81,13 +82,18 @@
       // Fetch and populate categories on page load
       function fetchCategories() {
         $.ajax({
-          url: '/project-sentiment-analysis/api/get_categories.php', // Adjust the path to your API
+          url: './../../controllers/get_categories.php', // Adjust the path to your API
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
-            if (response.success) {
-              // Populate the dropdown with categories
-              response.categories.forEach(function (category) {
-                $('#category').append(`<option value="${category.id}">${category.name}</option>`);
+            if (response.length > 0) {
+              const categoryDropdown = $('#category');
+              categoryDropdown.empty();
+              // categoryDropdown.append('<option value="" selected>All Category</option>');
+              response.forEach(function (category) {
+                var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase())
+                categoryDropdown.append(`<option value="${category.id}">${c_name}</option>`);
+              
               });
             } else {
               alert('Failed to fetch categories.');
