@@ -1,5 +1,8 @@
 <?php
   require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/../../models/ProductReviewModel.php';
+  $PRModel = new ProductReviewModel();
+  $OverallSentiment = $PRModel->getTotalReviewsSentimentPercentage();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,16 +57,26 @@
     </div>
     </section> -->
 
-    <?php
-require_once __DIR__ . "/../../models/SentimentAnalyzer.php"; 
-
-$total_reviews = 125;
-$positive_percentage = 60;
-$negative_percentage = 25;
-$neutral_percentage = 15;
-?>
-
 <section class="sentiment-reports">
+    <?php
+      $total_reviews = 0;
+      $positive_percentage = 0;
+      $negative_percentage = 0;
+      $neutral_percentage = 0;
+    if(!empty($OverallSentiment)){
+      foreach($OverallSentiment as $sentiment){
+        $total_reviews += $sentiment['total_reviews'];
+        if($sentiment['type'] == 'positive'){
+            $positive_percentage = $sentiment['percentage'];
+        } elseif($sentiment['type'] == 'negative'){
+            $negative_percentage = $sentiment['percentage'];
+        } elseif($sentiment['type'] == 'neutral'){
+            $neutral_percentage = $sentiment['percentage'];
+        }
+      }
+    }
+    ?>
+
     <div class="sentiment-card">
         <h3><?php echo $total_reviews; ?></h3>
         <p>Total Reviews</p>
@@ -84,26 +97,26 @@ $neutral_percentage = 15;
 
 <!-- CHART -->
 <?php 
-$chartData = [
-    [
-        'product' => 'Shoes',
-        'positive' => 60,
-        'negative' => 25,
-        'neutral' => 15
-    ],
-    [
-        'product' => 'Smartphone',
-        'positive' => 40,
-        'negative' => 35,
-        'neutral' => 25
-    ],
-    [
-        'product' => 'Pants',
-        'positive' => 80,
-        'negative' => 10,
-        'neutral' => 10
-    ]
-];
+// $chartData = [
+//     [
+//         'product' => 'Shoes',
+//         'positive' => 60,
+//         'negative' => 25,
+//         'neutral' => 15
+//     ],
+//     [
+//         'product' => 'Smartphone',
+//         'positive' => 40,
+//         'negative' => 35,
+//         'neutral' => 25
+//     ],
+//     [
+//         'product' => 'Pants',
+//         'positive' => 80,
+//         'negative' => 10,
+//         'neutral' => 10
+//     ]
+// ];
 ?>
 
 <html lang="en">

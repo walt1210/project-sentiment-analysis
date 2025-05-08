@@ -191,6 +191,19 @@ class ProductReviewModel{
         return $result->fetch_all(MYSQLI_ASSOC );
 
     }
+
+    public function getTotalReviewsSentimentPercentage(){
+        $sql = "SELECT type,
+                COUNT(*) AS total_reviews,
+                ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM sentiments), 2) AS percentage
+            FROM sentiments
+            GROUP BY type;";
+        $result =$this->conn->query( $sql );
+        return $result->fetch_all(MYSQLI_ASSOC );
+
+        
+
+    }
     
 
 }
