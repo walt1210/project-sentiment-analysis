@@ -53,6 +53,7 @@ class ProductReviewModel{
         $filter = !empty($conditions) ? "WHERE " . implode(" AND ", $conditions) : "";
         
         $sql = "SELECT
+            product_review_comments.id,
             products.name AS 'product_name',
             categories.name AS 'category_name',
             users.email,

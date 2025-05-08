@@ -249,17 +249,16 @@
         <thead>
           <tr>
             <th>Product</th>
+            <th>Category</th>
             <th>User</th>
-            <th style="width: 130px;">Rating</th>
-            <th style="width: 300px;">Review</th>
+            <th>Rating</th>
+            <th>Review</th>
             <th>Sentiment</th>
-            <th>Timelog</th>
-            <th>Discard</th>
           </tr>
         </thead>
         <tbody>
           <!-- Reviews will be dynamically populated here -->
-          <tr>
+          <!-- <tr>
             <td>Superstar II Shoes</td>
             <td>Taylor Swift</td>
             <td>⭐⭐⭐⭐⭐</td>
@@ -285,7 +284,7 @@
             <td>Positive</td>
             <td>2025-04-15 15:45:10</td>
             <td><button class="btn btn-danger btn-sm discard-review" data-id="3">Discard</button></td> 
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </section>
@@ -341,22 +340,21 @@
       function fetchReviews() {
         $.ajax({
           // url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
-          url: '/project-sentiment-analysis/controllers/get_reviews_of_product.php', 
+          url: './../../controllers/get_all_reviews.php', 
           method: 'GET',
           dataType: 'json',
           success: function (response) {
             if (response.success) {
               const reviewsTable = $('#reviewsTable').DataTable();
               reviewsTable.clear(); // Clear existing rows
-              response.reviews.forEach(function (review) {
+              response.data.forEach(function (review) {
                 reviewsTable.row.add([
                   review.product_name,
-                  review.user_name,
+                  review.category_name,
+                  review.email,
                   '★'.repeat(review.rating),
-                  review.review,
-                  review.sentiment,
-                  review.timelog,
-                  `<button class="btn btn-danger btn-sm discard-review" data-id="${review.id}">Discard</button>`,
+                  review.review_text,
+                  review.type
                 ]);
               });
               reviewsTable.draw(); // Redraw the table with new data
