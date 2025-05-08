@@ -414,23 +414,30 @@ $chartData = [
                 {
                   label: 'Positive',
                   data: positive,
-                  backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                  backgroundColor: 'rgba(100, 181, 246, 0.7)'
                 },
                 {
                   label: 'Neutral',
                   data: neutral,
-                  backgroundColor: 'rgba(201, 203, 207, 0.7)'
+                  backgroundColor: 'rgba(92, 107, 192, 0.7)'
                 },
                 {
                   label: 'Negative',
                   data: negative,
-                  backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                  backgroundColor: 'rgba(40, 53, 147, 0.7)'
                 }
               ]
             },
             options: {
               responsive: true,
               plugins: {
+                tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        },
                 title: {
                   display: true,
                   text: 'Sentiment Breakdown by Product'
@@ -438,7 +445,12 @@ $chartData = [
               },
               scales: {
                 x: { stacked: true },
-                y: { stacked: true, beginAtZero: true }
+                y: { stacked: true, beginAtZero: true,  max: 100,
+                            title: {
+                                display: true,
+                                text: 'Percentage'
+                            }
+                }
               }
             }
           });
