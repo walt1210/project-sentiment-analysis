@@ -349,12 +349,12 @@
               reviewsTable.clear(); // Clear existing rows
               response.data.forEach(function (review) {
                 reviewsTable.row.add([
-                  review.product_name,
-                  review.category_name,
+                  review.product_name.replace(/\b\w/g, char => char.toUpperCase()),
+                  review.category_name.replace(/\b\w/g, char => char.toUpperCase()),
                   review.email,
                   '★'.repeat(review.rating),
                   review.review_text,
-                  review.type
+                  review.type.replace(/\b\w/g, char => char.toUpperCase())
                 ]);
               });
               reviewsTable.draw(); // Redraw the table with new data
