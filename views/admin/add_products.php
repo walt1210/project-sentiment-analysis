@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — View Users</title>
+  <title>Sentimo — Add Products</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
@@ -30,7 +30,7 @@
 
     <!-- 1) Hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/add-product-gif.gif" alt="Sentimo Add Product">
+      <img src="../../assets/add-product-gif.gif" alt="Sentimo Add Product">
     </section>
 
     <!-- 2) Add Product Form -->

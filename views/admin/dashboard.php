@@ -228,14 +228,14 @@
     <!-- 4) Product Reviews Table -->
     <h2>Product Reviews</h2>
     <section class="reviews-table" style="width: 100%; overflow-x: auto;">
-      <table id="reviewsTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
+      <table id="reviewsTable" class="table table-striped table-bordered" style="width: 100%; table-layout: auto;">
         <thead>
           <tr>
             <th>Product</th>
             <th>Category</th>
             <th>User</th>
             <th>Rating</th>
-            <th>Review</th>
+            <th style="width: 40%;">Review</th> <!-- Set a wider width for the Review column -->
             <th>Sentiment</th>
           </tr>
         </thead>
