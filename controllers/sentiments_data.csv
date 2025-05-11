@@ -1,2 +1,5 @@
 product_name,category_name,email,rating,review_text,percentage,type
-"baby powder","personal care",walteru270@gmail.com,5,"has a good quality",100.00,positive
+shoes,fashion,lovelycunanan@gmail.com,5,"Comfortable and fit for my feet",100.00,positive
+shoes,fashion,catherinetayer@gmail.com,3,"good and nice looks",100.00,positive
+laptop,electronics,catherinetayer@gmail.com,3,"nice specs",100.00,positive
+shoes,fashion,catherinetayer@gmail.com,5,fake,0.00,negative

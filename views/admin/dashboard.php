@@ -1,5 +1,8 @@
 <?php
-  // require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/../../models/ProductReviewModel.php';
+  $PRModel = new ProductReviewModel();
+  $OverallSentiment = $PRModel->getTotalReviewsSentimentPercentage();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,16 +57,26 @@
     </div>
     </section> -->
 
-    <?php
-require_once __DIR__ . "/../../models/SentimentAnalyzer.php"; 
-
-$total_reviews = 125;
-$positive_percentage = 60;
-$negative_percentage = 25;
-$neutral_percentage = 15;
-?>
-
 <section class="sentiment-reports">
+    <?php
+      $total_reviews = 0;
+      $positive_percentage = 0;
+      $negative_percentage = 0;
+      $neutral_percentage = 0;
+    if(!empty($OverallSentiment)){
+      foreach($OverallSentiment as $sentiment){
+        $total_reviews += $sentiment['total_reviews'];
+        if($sentiment['type'] == 'positive'){
+            $positive_percentage = $sentiment['percentage'];
+        } elseif($sentiment['type'] == 'negative'){
+            $negative_percentage = $sentiment['percentage'];
+        } elseif($sentiment['type'] == 'neutral'){
+            $neutral_percentage = $sentiment['percentage'];
+        }
+      }
+    }
+    ?>
+
     <div class="sentiment-card">
         <h3><?php echo $total_reviews; ?></h3>
         <p>Total Reviews</p>
@@ -84,26 +97,26 @@ $neutral_percentage = 15;
 
 <!-- CHART -->
 <?php 
-$chartData = [
-    [
-        'product' => 'Shoes',
-        'positive' => 60,
-        'negative' => 25,
-        'neutral' => 15
-    ],
-    [
-        'product' => 'Smartphone',
-        'positive' => 40,
-        'negative' => 35,
-        'neutral' => 25
-    ],
-    [
-        'product' => 'Pants',
-        'positive' => 80,
-        'negative' => 10,
-        'neutral' => 10
-    ]
-];
+// $chartData = [
+//     [
+//         'product' => 'Shoes',
+//         'positive' => 60,
+//         'negative' => 25,
+//         'neutral' => 15
+//     ],
+//     [
+//         'product' => 'Smartphone',
+//         'positive' => 40,
+//         'negative' => 35,
+//         'neutral' => 25
+//     ],
+//     [
+//         'product' => 'Pants',
+//         'positive' => 80,
+//         'negative' => 10,
+//         'neutral' => 10
+//     ]
+// ];
 ?>
 
 <html lang="en">
@@ -117,11 +130,11 @@ $chartData = [
         <h2 style="text-align: center;">Product Sentiment Breakdown</h2>
         <canvas id="sentimentChart" width="700" height="400"></canvas>
 
-        <script>
-            const labels = <?php echo json_encode(array_column($chartData, 'product')); ?>;
-            const positiveData = <?php echo json_encode(array_column($chartData, 'positive')); ?>;
-            const negativeData = <?php echo json_encode(array_column($chartData, 'negative')); ?>;
-            const neutralData = <?php echo json_encode(array_column($chartData, 'neutral')); ?>;
+        <!-- <script>
+            const labels = <?php //echo json_encode(array_column($chartData, 'product')); ?>;
+            const positiveData = <?php //echo json_encode(array_column($chartData, 'positive')); ?>;
+            const negativeData = <?php //echo json_encode(array_column($chartData, 'negative')); ?>;
+            const neutralData = <?php //echo json_encode(array_column($chartData, 'neutral')); ?>;
 
             const ctx = document.getElementById('sentimentChart').getContext('2d');
             new Chart(ctx, {
@@ -177,7 +190,7 @@ $chartData = [
                     }
                 }
             });
-        </script>
+        </script> -->
     </section>
 </body>
 </html>
@@ -236,17 +249,16 @@ $chartData = [
         <thead>
           <tr>
             <th>Product</th>
+            <th>Category</th>
             <th>User</th>
-            <th style="width: 130px;">Rating</th>
-            <th style="width: 300px;">Review</th>
+            <th>Rating</th>
+            <th>Review</th>
             <th>Sentiment</th>
-            <th>Timelog</th>
-            <th>Discard</th>
           </tr>
         </thead>
         <tbody>
           <!-- Reviews will be dynamically populated here -->
-          <tr>
+          <!-- <tr>
             <td>Superstar II Shoes</td>
             <td>Taylor Swift</td>
             <td>⭐⭐⭐⭐⭐</td>
@@ -272,7 +284,7 @@ $chartData = [
             <td>Positive</td>
             <td>2025-04-15 15:45:10</td>
             <td><button class="btn btn-danger btn-sm discard-review" data-id="3">Discard</button></td> 
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </section>
@@ -298,6 +310,11 @@ $chartData = [
   <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
   <script>
+    window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // Reloads page and re-triggers PHP
+    }
+  });
     $(document).ready(function () {
       // Initialize DataTables for Product List Table
       $('#productTable').DataTable({
@@ -323,21 +340,21 @@ $chartData = [
       function fetchReviews() {
         $.ajax({
           // url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
-          url: '/project-sentiment-analysis/controllers/get_reviews_of_product.php', 
+          url: './../../controllers/get_all_reviews.php', 
           method: 'GET',
+          dataType: 'json',
           success: function (response) {
             if (response.success) {
               const reviewsTable = $('#reviewsTable').DataTable();
               reviewsTable.clear(); // Clear existing rows
-              response.reviews.forEach(function (review) {
+              response.data.forEach(function (review) {
                 reviewsTable.row.add([
-                  review.product_name,
-                  review.user_name,
+                  review.product_name.replace(/\b\w/g, char => char.toUpperCase()),
+                  review.category_name.replace(/\b\w/g, char => char.toUpperCase()),
+                  review.email,
                   '★'.repeat(review.rating),
-                  review.review,
-                  review.sentiment,
-                  review.timelog,
-                  `<button class="btn btn-danger btn-sm discard-review" data-id="${review.id}">Discard</button>`,
+                  review.review_text,
+                  review.type.replace(/\b\w/g, char => char.toUpperCase())
                 ]);
               });
               reviewsTable.draw(); // Redraw the table with new data
@@ -376,6 +393,93 @@ $chartData = [
           });
         }
       });
+
+
+
+
+
+      $.ajax({
+        url: './../../controllers/get_product_with_total_sentiment.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+          let labels = [];
+          let positive = [];
+          let neutral = [];
+          let negative = [];
+
+          response.data.forEach(function (item) {
+            labels.push(item.product);
+            positive.push(parseInt(item.positive));
+            neutral.push(parseInt(item.neutral));
+            negative.push(parseInt(item.negative));
+          });
+
+          const ctx = document.getElementById('sentimentChart').getContext('2d');
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Positive',
+                  data: positive,
+                  backgroundColor: 'rgba(100, 181, 246, 0.7)'
+                },
+                {
+                  label: 'Neutral',
+                  data: neutral,
+                  backgroundColor: 'rgba(92, 107, 192, 0.7)'
+                },
+                {
+                  label: 'Negative',
+                  data: negative,
+                  backgroundColor: 'rgba(40, 53, 147, 0.7)'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        },
+                title: {
+                  display: true,
+                  text: 'Sentiment Breakdown by Product'
+                }
+              },
+              scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true,  max: 100,
+                            title: {
+                                display: true,
+                                text: 'Percentage'
+                            }
+                }
+              }
+            }
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error('AJAX Error: ' + status + error);
+        }
+      });
+
+
+
+
+
+
+
+
+
+
     });
   </script>
 </body>

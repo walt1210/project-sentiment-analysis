@@ -6,11 +6,17 @@ header("Pragma: no-cache"); // HTTP 1.0
 header("Expires: 0"); // Proxies
 
 if(isset($_SESSION['email'])){
-    if($_SESSION['role_id'] == 2){
+    
+    //IF SUPER ADMIN
+    if($_SESSION['role_id'] == 3){
+        header("Location: views/super_admin/dashboard.php");
+    }
+    //IF ADMIN
+    elseif($_SESSION['role_id'] == 2 ){
       header("Location: views/admin/dashboard.php");
     }
     //IF REGULAR USER
-    else{
+    elseif($_SESSION['role_id'] == 1 ){
         header("Location: views/user/dashboard.php");
     }
     die();

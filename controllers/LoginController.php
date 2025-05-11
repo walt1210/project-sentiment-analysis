@@ -26,11 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ../views/user/dashboard.php');
                 exit();
             }
-            else{    //if admin
+            elseif($row['role_id'] == 2){    //if admin
                 header('Location: ../views/admin/dashboard.php');
                 exit();
             }
-            die();
+            elseif($row['role_id'] == 3){    //if super admin
+                header('Location: ../views/super_admin/dashboard.php');
+                exit();
+            }
         }
         else{
             echo '<script> alert("Wrong Password");

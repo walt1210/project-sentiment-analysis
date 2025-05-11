@@ -53,6 +53,12 @@ class UserModel{
         return $stmt->execute();
     }
 
+    public function updateRole($id, $role_id){
+        $stmt = $this->conn->prepare("UPDATE users SET role_id=? WHERE id = ?");
+        $stmt->bind_param("ii", $role_id, $id);
+        return $stmt->execute();
+    }
+
 
     public function delete($email){
         $stmt = $this->conn->prepare("DELETE FROM users WHERE email = ?");
