@@ -1,0 +1,29 @@
+<?php
+require_once __DIR__ . "/../config.php";  /
+require_once __DIR__ . "/../models/ProductsModel.php"; 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+   
+    $product_id = $_POST['id'];
+    $product_name = $_POST['product_name'];
+    $price = $_POST['price'];
+    $category_id = $_POST['category'];
+    $image = null;  
+    
+    if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == 0) {
+        $image = $_FILES['product_image'];
+        $upload_dir = __DIR__ . '/../uploads/';
+        $image_path = $upload_dir . basename($image['name']);
+        if (move_uploaded_file($image['tmp_name'], $image_path)) {
+            $image = $image_path;  
+        } else {
+            $image = null;  
+        }
+    }
+
+    $productModel = new ProductModel();
+    $success = $productModel->updateProduct($product_id, $product_name, $price, $category_id, $image);
+
+    echo json_encode(['success' => $success]);
+}
+?>

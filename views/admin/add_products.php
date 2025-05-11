@@ -1,12 +1,13 @@
 <?php
-  //require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/session.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sentimo — Add Products</title>
+  <title>Sentimo — View Users</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
 </head>
 <body>
@@ -18,6 +19,7 @@
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
+          <li class="nav-item"><a class="nav-link" href="add_categories.php">Add Categories</a></li>
           <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
@@ -75,14 +77,13 @@
   <script>
     window.addEventListener('pageshow', function (event) {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-      location.reload(); // Reloads page and re-triggers PHP
+      location.reload(); 
     }
   });
     $(document).ready(function () {
-      // Fetch and populate categories on page load
       function fetchCategories() {
         $.ajax({
-          url: './../../controllers/get_categories.php', // Adjust the path to your API
+          url: './../../controllers/get_categories.php',
           method: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -105,10 +106,8 @@
         });
       }
 
-      // Call fetchCategories on page load
       fetchCategories();
 
-      // Handle image preview
       $('#image-upload').on('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -126,13 +125,12 @@
         }
       });
 
-      // Handle Add Product Form Submission
       $('#addProductForm').on('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
 
         $.ajax({
-          url: '/project-sentiment-analysis/api/add_product.php', // Adjust the path to your API
+          url: '/project-sentiment-analysis/views/admin/add_products.php', 
           method: 'POST',
           data: formData,
           processData: false,

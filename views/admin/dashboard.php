@@ -24,6 +24,7 @@
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
+          <li class="nav-item"><a class="nav-link" href="add_categories.php">Add Categories</a></li>
           <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
@@ -204,44 +205,26 @@
 
 <!-- 3) Products Table -->
 <h2>Product List</h2>
-    <section class="product-table" style="width: 100%; overflow-x: auto;">
-      <table id="productTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
-        <thead>
-          <tr>
-            <th style="width: 100px;">ID</th>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th style="width: 275px;">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Superstar II Shoes</td>
-            <td>Fashion</td>
-            <td>₱5,500</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
-              <button class="btn btn-danger btn-sm">Delete</button>
-              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Smartphone X</td>
-            <td>Electronics</td>
-            <td>₱25,000</td>
-            <td>
-              <button class="btn btn-primary btn-sm">Edit</button> <!-- Redirect to edit_product.php (it should automatically populate the product's name, categ, etc.) -->
-              <button class="btn btn-danger btn-sm">Delete</button>
-              <a href="view_reviews.php?product_id=<?php echo $product['id']; ?>" class="btn btn-info btn-sm">View Reviews</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+<section class="product-table" style="width: 100%; overflow-x: auto;">
+  <table id="productTable" class="table table-striped table-bordered" style="width: 100%; table-layout: fixed;">
+    <thead>
+      <tr>
+        <th style="width: 100px;">ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th style="width: 275px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data will be injected here via jQuery -->
+    </tbody>
+  </table>
+</section>
 
+</script>           
+        
     <!-- 4) Product Reviews Table -->
     <h2>Product Reviews</h2>
     <section class="reviews-table" style="width: 100%; overflow-x: auto;">
@@ -289,6 +272,7 @@
       </table>
     </section>
      
+    
   </main>
 
   <footer class="site-footer">
@@ -312,7 +296,7 @@
   <script>
     window.addEventListener('pageshow', function (event) {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-      location.reload(); // Reloads page and re-triggers PHP
+      location.reload(); 
     }
   });
     $(document).ready(function () {
@@ -326,6 +310,100 @@
         autoWidth: false,
       });
 
+  function fetchProducts() {
+  $.ajax({
+    url: './../../controllers/get_products.php',
+    method: 'GET',
+    dataType: 'json',
+    success: function (response) {
+      console.log(response); // Log the response to check the structure
+      if (response.success) {
+        const productsTable = $('#productTable').DataTable();
+        productsTable.clear();
+        response.data.forEach(function (product) {
+          const productName = product.name ? product.name.replace(/\b\w/g, char => char.toUpperCase()) : '';
+          const categoryName = product.category_id ? product.category_id.replace(/\b\w/g, char => char.toUpperCase()) : '';
+          const price = product.price ? `₱${parseFloat(product.price).toFixed(2)}` : '₱0.00';
+          const image = product.image ? `<img src='../../uploads/${product.image}' width='60'>` : '';
+          const actions = `
+            <a href='edit_product.php?id=${product.id}' class='btn btn-sm btn-primary'>Edit</a>
+            <button class='btn btn-sm btn-danger delete-btn' data-id='${product.id}'>Delete</button>
+          `;
+
+          productsTable.row.add([ 
+            product.id,
+            productName,
+            categoryName,
+            price,
+            image,
+            actions
+          ]);
+        });
+        productsTable.draw();
+      } else {
+        alert('Failed to fetch products.');
+      }
+    },
+    error: function () {
+      alert('An error occurred while fetching products.');
+    },
+  });
+}
+
+fetchProducts();
+
+$(document).on('click', '.delete-btn', function () {
+  const productId = $(this).data('id');
+  console.log("Product ID to delete: ", productId);  // Log productId to check
+  
+  if (confirm('Are you sure you want to delete this product?')) {
+    $.ajax({
+      url: '/project-sentiment-analysis/views/admin/delete_product.php',
+      method: 'GET',
+      data: { id: productId },
+      success: function(response) {
+        console.log(response);  
+        
+        try {
+          response = JSON.parse(response);  
+        } catch (error) {
+          console.error('Failed to parse JSON response:', error);
+        }
+        
+        if (response.success) {
+          alert('Product deleted successfully.');
+          location.reload(true);  
+        } else {
+          alert('Failed to delete the product. ' + (response.message || ''));
+        }
+      },
+      error: function() {
+        alert('An error occurred while deleting the product.');
+      },
+    });
+  }
+});
+
+
+function deleteProduct(productId) {
+  $.ajax({
+    url: '/project-sentiment-analysis/views/admin/delete_product.php',  // Ensure this is the correct URL
+    method: 'GET',
+    data: { id: productId },
+    success: function (response) {
+      if (response.success) {
+        alert('Product deleted successfully.');
+        location.reload();
+      } else {
+        alert('Failed to delete the product.');
+      }
+    },
+    error: function () {
+      alert('An error occurred while deleting the product.');
+    },
+  });
+}
+
       // Initialize DataTables for Product Reviews Table
       $('#reviewsTable').DataTable({
         paging: true,
@@ -336,17 +414,16 @@
         autoWidth: false,
       });
 
-      // Fetch and populate reviews on page load
       function fetchReviews() {
         $.ajax({
-          // url: '/project-sentiment-analysis/api/get_reviews.php', // Adjust the path to your API
+          // url: '/project-sentiment-analysis/api/get_reviews.php',
           url: './../../controllers/get_all_reviews.php', 
           method: 'GET',
           dataType: 'json',
           success: function (response) {
             if (response.success) {
               const reviewsTable = $('#reviewsTable').DataTable();
-              reviewsTable.clear(); // Clear existing rows
+              reviewsTable.clear(); 
               response.data.forEach(function (review) {
                 reviewsTable.row.add([
                   review.product_name.replace(/\b\w/g, char => char.toUpperCase()),
@@ -357,7 +434,7 @@
                   review.type.replace(/\b\w/g, char => char.toUpperCase())
                 ]);
               });
-              reviewsTable.draw(); // Redraw the table with new data
+              reviewsTable.draw(); 
             } else {
               alert('Failed to fetch reviews.');
             }
@@ -368,21 +445,19 @@
         });
       }
 
-      // Call fetchReviews on page load
       fetchReviews();
 
-      // Handle Discard Review Action
       $(document).on('click', '.discard-review', function () {
         const reviewId = $(this).data('id');
         if (confirm('Are you sure you want to discard this review?')) {
           $.ajax({
-            url: '/project-sentiment-analysis/api/discard_review.php', // Adjust the path to your API
+            url: '/project-sentiment-analysis/api/discard_review.php', 
             method: 'POST',
             data: { id: reviewId },
             success: function (response) {
               if (response.success) {
                 alert('Review discarded successfully.');
-                fetchReviews(); // Refresh the reviews table
+                fetchReviews(); 
               } else {
                 alert('Failed to discard review.');
               }
@@ -393,10 +468,6 @@
           });
         }
       });
-
-
-
-
 
       $.ajax({
         url: './../../controllers/get_product_with_total_sentiment.php',
@@ -470,15 +541,6 @@
           console.error('AJAX Error: ' + status + error);
         }
       });
-
-
-
-
-
-
-
-
-
 
     });
   </script>

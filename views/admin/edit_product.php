@@ -18,6 +18,7 @@
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
+          <li class="nav-item"><a class="nav-link" href="add_categories.php">Add Categories</a></li>
           <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
@@ -75,73 +76,83 @@
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script>
-    $(document).ready(function () {
-      // Fetch product details and populate the form
-      function fetchProductDetails(productId) {
-        $.ajax({
-          url: '/project-sentiment-analysis/api/get_product.php', // Adjust the path to your API
-          method: 'GET',
-          data: { id: productId },
-          success: function (response) {
-            if (response.success) {
-              // Populate the form fields with product data
-              $('#product_name').val(response.product.name);
-              $('#price').val(response.product.price);
-              $('#category').val(response.product.category_id);
-              if (response.product.image) {
-                $('#image-preview').attr('src', response.product.image).show();
-                $('#preview-icon').hide();
-                $('#upload-text').hide();
-              }
-            } else {
-              alert('Failed to fetch product details.');
-            }
-          },
-          error: function () {
-            alert('An error occurred while fetching product details.');
-          },
-        });
-      }
 
-      // Fetch categories and populate the dropdown
+   function fetchProductDetails(productId) {
+  $.ajax({
+    url: './../../controllers/get_products.php',
+    method: 'GET',
+    dataType: 'json', 
+    data: { id: productId },
+    success: function (response) {
+      console.log(response); 
+
+      if (response.success && Array.isArray(response.data)) {
+        const product = response.data.find(p => p.id == productId);
+        if (product) {
+          $('#product_name').val(product.name);
+          $('#price').val(product.price);
+          $('#category').val(product.category_id);
+
+          if (product.image_url) {
+            $('#image-preview').attr('src', product.image_url).show();
+            $('#preview-icon').hide();
+            $('#upload-text').hide();
+          }
+        } else {
+          alert('Product not found.');
+        }
+      } else {
+        alert('Failed to fetch product details.');
+      }
+    },
+    error: function () {
+      alert('An error occurred while fetching product details.');
+    }
+  });
+}
+
+
       function fetchCategories() {
-        $.ajax({
-          url: '/project-sentiment-analysis/api/get_categories.php', // Adjust the path to your API
-          method: 'GET',
-          success: function (response) {
-            if (response.success) {
-              response.categories.forEach(function (category) {
-                $('#category').append(`<option value="${category.id}">${category.name}</option>`);
-              });
-            } else {
-              alert('Failed to fetch categories.');
-            }
-          },
-          error: function () {
-            alert('An error occurred while fetching categories.');
-          },
-        });
-      }
+   $.ajax({
+     url: './../../controllers/get_categories.php',
+     method: 'GET',
+     dataType: 'json',
+     success: function (response) {
+       console.log(response);  // Log the response to see if categories are returned
+       if (response.length > 0) {
+         const categoryDropdown = $('#category');
+         categoryDropdown.empty();
+         response.forEach(function (category) {
+           var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase());  // Capitalize category name
+           categoryDropdown.append(`<option value="${category.id}">${c_name}</option>`);
+         });
+       } else {
+         alert('No categories found.');
+       }
+     },
+     error: function () {
+       alert('An error occurred while fetching categories.');
+     },
+   });
+}
 
-      // Get the product ID from the URL query string
       const urlParams = new URLSearchParams(window.location.search);
       const productId = urlParams.get('id');
 
       if (productId) {
-        fetchProductDetails(productId); // Fetch product details
-        fetchCategories(); // Fetch categories
+        fetchProductDetails(productId); 
+        fetchCategories(); 
       } else {
         alert('No product ID provided.');
       }
 
-      // Handle Edit Product Form Submission
       $('#editProductForm').on('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
-        formData.append('id', productId); // Include the product ID
+        formData.append('id', productId); 
 
         $.ajax({
-          url: '/project-sentiment-analysis/api/update_product.php', // Adjust the path to your API
+          url: '/project-sentiment-analysis/controllers/update_product.php', 
           method: 'POST',
           data: formData,
           processData: false,
@@ -149,7 +160,7 @@
           success: function (response) {
             if (response.success) {
               alert('Product updated successfully.');
-              window.location.href = 'dashboard.php'; // Redirect to dashboard
+              window.location.href = 'dashboard.php'; 
             } else {
               alert('Failed to update product. Please try again.');
             }
@@ -159,7 +170,7 @@
           },
         });
       });
-    });
+  
   </script>
 </body>
 </html>

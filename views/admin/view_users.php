@@ -19,6 +19,7 @@
         </a>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a class="nav-link" href="add_products.php">Add Product</a></li>
+          <li class="nav-item"><a class="nav-link" href="add_categories.php">Add Categories</a></li>
           <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
           <li class="nav-item"><a class="nav-link" href="../../logoutController.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a></li>
         </ul>
@@ -112,15 +113,15 @@
         processing: true,
         serverSide: false,
         ajax:  {
-          url: './../../controllers/UserController.php', // Adjust the path to your API
+          url: './../../controllers/UserController.php', 
           type: 'GET',
           dataType: 'json',
           dataSrc: function(response) {
             if(response.data.length > 0){
-              return response.data; // Return the data array from the response
+              return response.data; 
             } else {
               alert('No accounts found.');
-              return []; // Return an empty array if no reviews found
+              return []; 
             }
          }
         },
@@ -134,7 +135,7 @@
           },
           { data: 'email' },
           { data: 'role_name', render: function(data) {
-            return data.replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
+            return data.replace(/\b\w/g, char => char.toUpperCase()); 
             } 
           },
           { data: 'latest_login'}
