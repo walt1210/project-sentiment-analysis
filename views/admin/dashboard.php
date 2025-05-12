@@ -326,7 +326,7 @@
           const price = product.price ? `₱${parseFloat(product.price).toFixed(2)}` : '₱0.00';
           const image = product.image_url ? `<img src='/project-sentiment-analysis/${product.image_url}' width='60'>` : '';
             // const image = product.image ? `<img src='../../uploads/${product.image}' width='60'>` : '';
-          const actions = `
+          const actions = ` 
             <a href='edit_product.php?id=${product.id}' class='btn btn-sm btn-primary'>Edit</a>
             <button class='btn btn-sm btn-danger delete-btn' data-id='${product.id}'>Delete</button>
           `;
@@ -388,7 +388,7 @@ $(document).on('click', '.delete-btn', function () {
 
 function deleteProduct(productId) {
   $.ajax({
-    url: '/project-sentiment-analysis/views/admin/delete_product.php',  // Ensure this is the correct URL
+    url: '/project-sentiment-analysis/views/admin/delete_product.php',  
     method: 'GET',
     data: { id: productId },
     success: function (response) {

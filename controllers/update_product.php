@@ -11,16 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'];
     $image = null;  
     
-    if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == 0) {
-        $image = $_FILES['product_image'];
-        $upload_dir = __DIR__ . '/../uploads/';
-        $image_path = $upload_dir . basename($image['name']);
-        if (move_uploaded_file($image['tmp_name'], $image_path)) {
-            $image = $image_path;  
-        } else {
-            $image = null;  
-        }
+   if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == 0) {
+    $imageFile = $_FILES['product_image'];
+    $uploadDir = __DIR__ . '/../uploads/';
+    $imageName = uniqid() . '_' . basename($imageFile['name']);
+    $imagePath = $uploadDir . $imageName;
+
+    if (move_uploaded_file($imageFile['tmp_name'], $imagePath)) {
+        $image = 'uploads/' . $imageName;
+    } else {
+        $image = null;
     }
+}
+
 
     $productModel = new ProductModel();
     $success = $productModel->update($product_id, $product_name, $price, $category_id, $description, $image);

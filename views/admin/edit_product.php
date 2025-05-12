@@ -149,6 +149,22 @@
         alert('No product ID provided.');
       }
 
+      $('#image-upload').on('change', function (event) {
+      const [file] = event.target.files;
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          $('#image-preview').attr('src', e.target.result).show();
+          $('#preview-icon').hide();
+          $('#upload-text').hide();
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+
       $('#editProductForm').on('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
@@ -161,17 +177,17 @@
           processData: false,
           contentType: false,
           success: function (response) {
-  let jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+          let jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
 
-  console.log(jsonResponse);
+          console.log(jsonResponse);
 
-  if (jsonResponse.success) {
-    alert('Product updated successfully.');
-    window.location.href = 'dashboard.php'; 
-  } else {
-    alert('Failed to update product. Please try again.');
-  }
-}
+          if (jsonResponse.success) {
+            alert('Product updated successfully.');
+            window.location.href = 'dashboard.php'; 
+          } else {
+            alert('Failed to update product. Please try again.');
+          }
+        }
 
         });
       });
