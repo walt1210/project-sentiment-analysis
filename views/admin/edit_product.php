@@ -111,19 +111,18 @@
   });
 }
 
-
       function fetchCategories() {
    $.ajax({
      url: './../../controllers/get_categories.php',
      method: 'GET',
      dataType: 'json',
      success: function (response) {
-       console.log(response);  // Log the response to see if categories are returned
+       console.log(response);  
        if (response.length > 0) {
          const categoryDropdown = $('#category');
          categoryDropdown.empty();
          response.forEach(function (category) {
-           var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase());  // Capitalize category name
+           var c_name = category.name.replace(/\b\w/g, char => char.toUpperCase());  
            categoryDropdown.append(`<option value="${category.id}">${c_name}</option>`);
          });
        } else {
