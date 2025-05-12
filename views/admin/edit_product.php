@@ -47,6 +47,8 @@
             </select>
           </div>
           
+          <!-- Description -->
+          <input type="text" id="description" name="description" placeholder="Description" required>
 
           <!-- Image Upload -->
           <label for="image-upload" class="upload-box">
@@ -93,6 +95,7 @@
           $('#product_name').val(product.name);
           $('#price').val(product.price);
           $('#category').val(product.category_id);
+          $('#description').val(product.description);
 
           if (product.image_url) {
             $('#image-preview').attr('src', '/project-sentiment-analysis/' + product.image_url).show();
@@ -158,17 +161,18 @@
           processData: false,
           contentType: false,
           success: function (response) {
-            console.log(response);
-            if (response.success) {
-              alert('Product updated successfully.');
-              window.location.href = 'dashboard.php'; 
-            } else {
-              alert('Failed to update product. Please try again.');
-            }
-          },
-          error: function () {
-            alert('An error occurred. Please try again.');
-          },
+  let jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+
+  console.log(jsonResponse);
+
+  if (jsonResponse.success) {
+    alert('Product updated successfully.');
+    window.location.href = 'dashboard.php'; 
+  } else {
+    alert('Failed to update product. Please try again.');
+  }
+}
+
         });
       });
   
