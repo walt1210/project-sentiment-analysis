@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   
 </head>
 <body>
@@ -89,16 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
 <!-- Footer -->
 <footer class="site-footer">
   <div class="logo-small">
-    <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
-    <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+    <img src="../../assets/logo-icon.png" alt="">
+    <img src="../../assets/logo-text.png" alt="">
   </div>
   <ul class="footer-links">
-    <li><a href="/project-sentiment-analysis/about.php">About</a></li>
-    <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+    <li><a href="../../about.php">About</a></li>
+    <li><a href="../../creators.php">Creators</a></li>
   </ul>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../../assets/category-list.js"></script>
+<script src="../../assets/js/category-list.js"></script>
 </body>
 </html>

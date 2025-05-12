@@ -52,7 +52,7 @@
 
           <!-- Image Upload -->
           <label for="image-upload" class="upload-box">
-            <img src="/project-sentiment-analysis/uploads/" alt="Upload Icon" id="preview-icon">
+            <img src="../../uploads/" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
             <input type="file" id="image-upload" name="product_image" accept=".png" hidden>
           </label>

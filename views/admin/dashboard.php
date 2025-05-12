@@ -33,7 +33,7 @@
 
     <!-- 1) hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
+      <img src="../../assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
     </section>
 
   <main class="dashboard-page">
@@ -198,7 +198,7 @@
 
 </section> 
 
-<form method="post" action="/project-sentiment-analysis/controllers/export_reviews.php">
+<form method="post" action="../../controllers/export_reviews.php">
     <button type="submit" name="export" class="btn btn-primary">Export Reviews to CSV</button>
 </form>
 

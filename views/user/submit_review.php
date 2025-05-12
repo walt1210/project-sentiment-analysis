@@ -96,6 +96,7 @@
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="../../assets/js/submit-review.js"></script> -->
   <script>
     window.addEventListener('pageshow', function (event) {
       if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
