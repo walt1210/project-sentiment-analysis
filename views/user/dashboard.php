@@ -32,8 +32,12 @@
   <div class="container mt-4">
 
         <!-- 2. User Welcome Area -->
-        <div class="jumbotron text-center mt-4">
-        <h1 class="display-4">User: <span id="userFirstName"><?php echo $_SESSION["first_name"]. " ". $_SESSION["last_name"] ?></span></h1>
+        <div class="card text-center mt-4 shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title display-4 text-primary">Welcome, <span id="userFirstName"><?php echo $_SESSION["first_name"]. " ". $_SESSION["last_name"] ?>!</h1>
+            <p class="card-text text-muted">We're glad to have you back. Explore your dashboard and manage your reviews effortlessly.</p>
+            <a href="submit_review.php" class="btn btn-primary mt-3">Submit a Review</a>
+          </div>
         </div>
 
         <!-- Search Bar and Category Dropdown -->
