@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 function loadCategoryList() {
     $.ajax({
-        url: "/project-sentiment-analysis/controllers/get_categories.php",  
+        url: "../controllers/get_categories.php",  
         type: "GET",
         dataType: "json",
         success: function (data) {

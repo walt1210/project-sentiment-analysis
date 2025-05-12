@@ -30,7 +30,7 @@
 
     <!-- 1) Full‑bleed hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/manage-users.gif" alt="Sentimo Manage Users overview">
+      <img src="../../assets/manage-users.gif" alt="Sentimo Manage Users overview">
     </section>
 
     <!-- 2) Page heading -->

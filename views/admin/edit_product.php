@@ -50,7 +50,7 @@
 
           <!-- Image Upload -->
           <label for="image-upload" class="upload-box">
-            <img src="/project-sentiment-analysis/uploads/" alt="Upload Icon" id="preview-icon">
+            <img src="../../uploads/" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
             <input type="file" id="image-upload" name="product_image" accept=".png" hidden>
           </label>
@@ -95,7 +95,7 @@
           $('#category').val(product.category_id);
 
           if (product.image_url) {
-            $('#image-preview').attr('src', '/project-sentiment-analysis/' + product.image_url).show();
+            $('#image-preview').attr('src', '../../uploads/' + product.image_url).show();
             $('#preview-icon').hide();
             $('#upload-text').hide();
           }
@@ -152,7 +152,7 @@
         formData.append('id', productId); 
 
         $.ajax({
-          url: '/project-sentiment-analysis/controllers/update_product.php', 
+          url: '../../controllers/update_product.php', 
           method: 'POST',
           data: formData,
           processData: false,

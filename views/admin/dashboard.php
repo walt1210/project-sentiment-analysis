@@ -33,7 +33,7 @@
 
     <!-- 1) hero GIF -->
     <section class="hero">
-      <img src="/project-sentiment-analysis/assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
+      <img src="../../assets/admin-dashboard-here.gif" alt="Sentimo Admin Dashboard overview">
     </section>
 
   <main class="dashboard-page">
@@ -198,7 +198,7 @@
 
 </section> 
 
-<form method="post" action="/project-sentiment-analysis/controllers/export_reviews.php">
+<form method="post" action="../../controllers/export_reviews.php">
     <button type="submit" name="export" class="btn btn-primary">Export Reviews to CSV</button>
 </form>
 
@@ -324,7 +324,7 @@
           const productName = product.name ? product.name.replace(/\b\w/g, char => char.toUpperCase()) : '';
           const categoryName = product.category_id ? product.category_id.replace(/\b\w/g, char => char.toUpperCase()) : '';
           const price = product.price ? `₱${parseFloat(product.price).toFixed(2)}` : '₱0.00';
-          const image = product.image_url ? `<img src='/project-sentiment-analysis/${product.image_url}' width='60'>` : '';
+          const image = product.image_url ? `<img src='../../uploads/${product.image_url}' width='60'>` : '';
             // const image = product.image ? `<img src='../../uploads/${product.image}' width='60'>` : '';
           const actions = `
             <a href='edit_product.php?id=${product.id}' class='btn btn-sm btn-primary'>Edit</a>
@@ -359,7 +359,7 @@ $(document).on('click', '.delete-btn', function () {
   
   if (confirm('Are you sure you want to delete this product?')) {
     $.ajax({
-      url: '/project-sentiment-analysis/views/admin/delete_product.php',
+      url: 'delete_product.php',
       method: 'GET',
       data: { id: productId },
       success: function(response) {

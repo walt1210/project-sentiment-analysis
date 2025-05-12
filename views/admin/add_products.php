@@ -97,7 +97,7 @@
           </div>
           <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"  name="product_description" placeholder="Product Description" required></textarea>
           <label for="image-upload" class="upload-box">
-            <img src="/project-sentiment-analysis/assets/upload-image-icon.png" alt="Upload Icon" id="preview-icon">
+            <img src="../../assets/upload-image-icon.png" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
             <input type="file" id="image-upload" name="product_image" accept=".png" hidden required>
           </label>
