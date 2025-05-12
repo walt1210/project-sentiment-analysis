@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/styles.css?v=2">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="../../assets/category-list.js"></script>
+  
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -47,9 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
   </div>
 </nav>
 
+<main class="addProduct-page">
+
+<!-- Hero GIF -->
+<section class="hero">
+  <img src="../../assets/add-category-gif.gif" alt="Sentimo Add Category">
+</section>
+
 <div class="container mt-4">
   <div class="text-center mb-4">
-    <h2 class="display-4 text-primary">Manage Categories</h2>
+    <h2 class="mt-5">Manage Categories</h2>
     <p class="lead text-muted">Add new categories to the system.</p>
   </div>
 
@@ -72,11 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
 
     <h5 class="text-center">Existing Categories</h5>
     <ul id="category-list" class="list-group">
-     
+      <!-- Categories will be dynamically populated here -->
     </ul>
   </div>
 </div>
 
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="logo-small">
+    <img src="/project-sentiment-analysis/assets/logo-icon.png" alt="">
+    <img src="/project-sentiment-analysis/assets/logo-text.png" alt="">
+  </div>
+  <ul class="footer-links">
+    <li><a href="/project-sentiment-analysis/about.php">About</a></li>
+    <li><a href="/project-sentiment-analysis/creators.php">Creators</a></li>
+  </ul>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../assets/category-list.js"></script>
 </body>
 </html>

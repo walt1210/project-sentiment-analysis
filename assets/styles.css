@@ -683,6 +683,12 @@ body {
   white-space: nowrap;
 }
 
+.reviews-table table td:nth-child(5),
+.reviews-table table th:nth-child(5) {
+  word-wrap: break-word;
+  white-space: normal;
+  max-width: 400px;
+}
 
 .reviews-table .action-btn {
   padding: 0.5rem 1rem;

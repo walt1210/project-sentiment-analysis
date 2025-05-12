@@ -93,13 +93,13 @@ INSERT INTO categories (name) VALUES ('personal care');
 INSERT INTO categories (name) VALUES ('electronics');
 
 INSERT INTO products (name, category_id, price, description, image_url)
-    VALUES ('baby powder', '2', '50' , '500g', 'sample_url');
+    VALUES ('baby powder', '2', '50' , '500g', 'baby-powder.png');
 
 INSERT INTO products (name, category_id, price, description, image_url)
-    VALUES ('basketball', '1', '1000' ,'high quality', 'sample_url');
+    VALUES ('basketball', '1', '1000' ,'high quality', 'basketball.png');
 
 INSERT INTO products (name, category_id, price, description, image_url)
-    VALUES ('smarthphone', '3', '101' ,'high quality', 'sample_url');
+    VALUES ('smartphone', '3', '101' ,'high quality', 'smartphone-x.png');
 
 INSERT INTO product_review_comments (user_id, product_id, rating, review_text)
     VALUES ('1', '1', '5', 'has a good quality');
@@ -147,4 +147,3 @@ SELECT
   LEFT JOIN products ON product_review_comments.product_id = products.id
   LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
   GROUP BY products.id;
-
