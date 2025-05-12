@@ -1,6 +1,53 @@
 <?php
   require_once __DIR__ . '/session.php';
+  require_once __DIR__ . '/../../config.php';
+  $conn = Database::connect();
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = [];
+
+    if (
+        isset($_POST['product_name'], $_POST['price'], $_POST['category'], $_POST['product_description']) &&
+        isset($_FILES['product_image']) && $_FILES['product_image']['error'] === 0
+    ) {
+        $productName = $_POST['product_name'];
+        $price = $_POST['price'];
+        $category = $_POST['category'];
+        $description = $_POST['product_description'];
+
+        $image = $_FILES['product_image'];
+        $imageName = basename($image['name']);
+        $imageURL = '/uploads/' . $imageName;
+
+        if (move_uploaded_file($image['tmp_name'], '../../uploads/' . $imageName)) {
+
+            $stmt = $conn->prepare("INSERT INTO products (name, price, category_id, description, image_url) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sdiss", $productName, $price, $category, $description, $imageURL);
+
+            if ($stmt->execute()) {
+                $response['success'] = true;
+            } else {
+                $response['success'] = false;
+                $response['error'] = 'DB insert failed';
+            }
+
+            $stmt->close();
+            $conn->close();
+        } else {
+            $response['success'] = false;
+            $response['error'] = 'Image upload failed';
+        }
+    } else {
+        $response['success'] = false;
+        $response['error'] = 'Invalid input';
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+  }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,6 +183,7 @@
           processData: false,
           contentType: false,
           success: function (response) {
+          console.log("Response from server:", response);
             if (response.success) {
               alert('Product added successfully.');
               $('#addProductForm')[0].reset();

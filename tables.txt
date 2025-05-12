@@ -38,7 +38,7 @@ CREATE TABLE products (
     name VARCHAR(100) NOT NULL,
     category_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    description VARCHAR(100) NOT NULL,
+    description VARCHAR(100) NULL,
     image_url VARCHAR(100) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
@@ -147,3 +147,4 @@ SELECT
   LEFT JOIN products ON product_review_comments.product_id = products.id
   LEFT JOIN sentiments ON product_review_comments.id = sentiments.product_review_id
   GROUP BY products.id;
+

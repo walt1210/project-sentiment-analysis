@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../config.php";  /
+require_once __DIR__ . "/../config.php";  
 require_once __DIR__ . "/../models/ProductsModel.php"; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -26,4 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     echo json_encode(['success' => $success]);
 }
+
+
 ?>

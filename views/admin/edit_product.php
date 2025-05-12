@@ -46,10 +46,11 @@
               <!-- Categories will be dynamically populated -->
             </select>
           </div>
+          
 
           <!-- Image Upload -->
           <label for="image-upload" class="upload-box">
-            <img src="/project-sentiment-analysis/assets/upload-image-icon.png" alt="Upload Icon" id="preview-icon">
+            <img src="/project-sentiment-analysis/uploads/" alt="Upload Icon" id="preview-icon">
             <span id="upload-text">Upload Image<br><small>in .png format</small></span>
             <input type="file" id="image-upload" name="product_image" accept=".png" hidden>
           </label>
@@ -94,7 +95,7 @@
           $('#category').val(product.category_id);
 
           if (product.image_url) {
-            $('#image-preview').attr('src', product.image_url).show();
+            $('#image-preview').attr('src', '/project-sentiment-analysis/' + product.image_url).show();
             $('#preview-icon').hide();
             $('#upload-text').hide();
           }
@@ -157,6 +158,7 @@
           processData: false,
           contentType: false,
           success: function (response) {
+            console.log(response);
             if (response.success) {
               alert('Product updated successfully.');
               window.location.href = 'dashboard.php'; 
