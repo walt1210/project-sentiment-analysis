@@ -1,6 +1,6 @@
 function fetchProductDetails(productId) {
     $.ajax({
-      url: '../../controllers/get_products.php',
+      url: './../../controllers/get_products.php',
       method: 'GET',
       dataType: 'json', 
       data: { id: productId },
@@ -16,13 +16,9 @@ function fetchProductDetails(productId) {
             $('#description').val(product.description);
   
             if (product.image_url) {
-              $('#image-preview').attr('src', '../..//' + product.image_url).show();
+              $('#image-preview').attr('src', '../../' + product.image_url).show();
               $('#preview-icon').hide();
               $('#upload-text').hide();
-            } else {
-              $('#image-preview').hide();
-              $('#preview-icon').show();
-              $('#upload-text').show();
             }
           } else {
             alert('Product not found.');
@@ -39,7 +35,7 @@ function fetchProductDetails(productId) {
   
         function fetchCategories() {
      $.ajax({
-       url: '../../controllers/get_categories.php',
+       url: './../../controllers/get_categories.php',
        method: 'GET',
        dataType: 'json',
        success: function (response) {
@@ -71,6 +67,22 @@ function fetchProductDetails(productId) {
           alert('No product ID provided.');
         }
   
+        $('#image-upload').on('change', function (event) {
+        const [file] = event.target.files;
+        if (file) {
+          const reader = new FileReader();
+  
+          reader.onload = function (e) {
+            $('#image-preview').attr('src', e.target.result).show();
+            $('#preview-icon').hide();
+            $('#upload-text').hide();
+          };
+  
+          reader.readAsDataURL(file);
+        }
+      });
+  
+  
         $('#editProductForm').on('submit', function (e) {
           e.preventDefault();
           const formData = new FormData(this);
@@ -83,18 +95,17 @@ function fetchProductDetails(productId) {
             processData: false,
             contentType: false,
             success: function (response) {
-    let jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+            let jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
   
-    console.log(jsonResponse);
+            console.log(jsonResponse);
   
-    if (jsonResponse.success) {
-      alert('Product updated successfully.');
-      window.location.href = 'dashboard.php'; 
-    } else {
-      alert('Failed to update product. Please try again.');
-    }
-  }
+            if (jsonResponse.success) {
+              alert('Product updated successfully.');
+              window.location.href = 'dashboard.php'; 
+            } else {
+              alert('Failed to update product. Please try again.');
+            }
+          }
   
           });
         });
-    

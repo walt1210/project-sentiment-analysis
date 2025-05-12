@@ -246,4 +246,40 @@ function deleteProduct(productId) {
           console.error('AJAX Error: ' + status + error);
         }
       });
+
+      // Initialize DataTables for the Category Table
+      $('#categoryTable').DataTable({
+        paging: true, // Enable pagination
+        searching: true, // Enable search functionality
+        ordering: true, // Enable column sorting
+        lengthChange: true, // Allow users to change the number of rows displayed
+        pageLength: 10, // Default number of rows per page
+      });
+
+      // Load categories into the table
+      function loadCategoryList() {
+        $.ajax({
+          url: "/sentiment-analysis/project-sentiment-analysis/controllers/get_categories.php", // Adjust the path to your API
+          type: "GET",
+          dataType: "json",
+          success: function (data) {
+            const categoryTable = $('#categoryTable').DataTable();
+            categoryTable.clear(); // Clear existing rows
+    
+            // Loop through the categories and add rows
+            data.forEach(function (category) {
+              categoryTable.row.add([
+                category.id,
+                category.name,
+              ]).draw(); // Add and redraw the table
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching categories:", error);
+          }
+        });
+      }
+    
+      // Call the function to load categories
+      loadCategoryList();
     });
