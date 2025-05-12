@@ -14,11 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == 0) {
         $image = $_FILES['product_image'];
         $upload_dir = __DIR__ . '/../uploads/';
-        $image_path = $upload_dir . basename($image['name']);
+        $image_name = basename($image['name']);
+        $image_path = $upload_dir . $image_name;
         if (move_uploaded_file($image['tmp_name'], $image_path)) {
-            $image = $image_path;  
+            // Save only the relative path for web use
+            $image = 'uploads/' . $image_name;
         } else {
-            $image = null;  
+            $image = null;
         }
     }
 
@@ -27,6 +29,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     echo json_encode(['success' => $success]);
 }
-
-
 ?>

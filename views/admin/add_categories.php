@@ -100,6 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_name'])) {
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../../assets/category-list.js"></script>
+<script src="../../assets/js/category-list.js"></script>
 </body>
 </html>
