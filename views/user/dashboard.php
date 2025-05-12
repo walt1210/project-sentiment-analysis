@@ -169,7 +169,7 @@
                     append = `
                                  <div class="col-md-4">
                                     <div class="card">
-                                    <img src="../../uploads/${products.image_url}" class="card-img-top" alt="${products.name}">
+                                    <img src="../../${products.image_url}" class="card-img-top" alt="${products.name}">
                                         <div class="card-body">
                                             <h5 class="card-title">${prod_name}</h5>
                                             <p class="card-text">Category: ${cat_name}</p>
@@ -208,7 +208,7 @@
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                         .join(" ");
 
-                    $('#modalProductImage').attr('src', `../../uploads/${response.data.image_url}`);
+                    $('#modalProductImage').attr('src', `../../${response.data.image_url}`);
                     var prod_name = response.data.name.replace(/\b\w/g, char => char.toUpperCase());
                     $('#modalProductName').text(prod_name);
                     $('#modalProductCategory').text(`Category: ${category}`);

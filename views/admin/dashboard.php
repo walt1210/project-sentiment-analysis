@@ -324,7 +324,7 @@
           const productName = product.name ? product.name.replace(/\b\w/g, char => char.toUpperCase()) : '';
           const categoryName = product.category_id ? product.category_id.replace(/\b\w/g, char => char.toUpperCase()) : '';
           const price = product.price ? `₱${parseFloat(product.price).toFixed(2)}` : '₱0.00';
-          const image = product.image_url ? `<img src='../../uploads/${product.image_url}' width='60'>` : '';
+          const image = product.image_url ? `<img src='../../${product.image_url}' width='60'>` : '';
             // const image = product.image ? `<img src='../../uploads/${product.image}' width='60'>` : '';
           const actions = `
             <a href='edit_product.php?id=${product.id}' class='btn btn-sm btn-primary'>Edit</a>

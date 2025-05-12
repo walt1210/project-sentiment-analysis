@@ -98,7 +98,7 @@
           $('#description').val(product.description);
 
           if (product.image_url) {
-            $('#image-preview').attr('src', '../../uploads/' + product.image_url).show();
+            $('#image-preview').attr('src', '../../' + product.image_url).show();
             $('#preview-icon').hide();
             $('#upload-text').hide();
           }

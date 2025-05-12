@@ -1,2 +1,3 @@
 id,product_name,category_name,email,rating,review_text,percentage,type
 1,"baby powder","personal care",walteru270@gmail.com,5,"has a good quality",100.00,positive
+2,"baby powder","personal care",tayer@gmail.com,2,"It has a cooling effect but it is not suitable for my skin.",100.00,positive

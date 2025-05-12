@@ -177,7 +177,7 @@
         const formData = new FormData(this);
 
         $.ajax({
-          url: '/project-sentiment-analysis/views/admin/add_products.php', 
+          url: 'add_products.php', 
           method: 'POST',
           data: formData,
           processData: false,
